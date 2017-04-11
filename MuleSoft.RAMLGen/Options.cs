@@ -16,7 +16,7 @@ namespace MuleSoft.RAMLGen
         [Option('t', "templates", Required = false, HelpText = "Templates folder")]
         public string TemplatesFolder { get; set; }
 
-        [Option('o', "overwrite", Required = false, HelpText = "Overwrite files (defaults to not overwrite)")]
+        [Option('c', "confirm", Required = false, HelpText = "Confirm overwrite files (defaults to overwrite silently)")]
         public bool Overwrite { get; set; }
     }
 }

@@ -40,7 +40,7 @@ These are all the modifiers you can use:
 
   -t, --templates      Templates folder
 
-  -o, --overwrite      Overwrite files (defaults to not overwrite)
+  -c, --confirm        Confirm overwrite files (defaults to overwrite silently)
 
 Or type *RAMLGen client help* to get the options and usage examples.
 
