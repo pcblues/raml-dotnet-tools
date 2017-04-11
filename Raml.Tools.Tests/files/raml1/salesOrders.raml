@@ -14,13 +14,13 @@ baseUriParameters:
         type: string
 mediaType: application/json
 uses:
-    common: types/commonTypes.raml
+    common: types/commonTypes.raml # A set of common base type definitions 
 resourceTypes:
-    collectionResource: !include resourceTypes/collectionResourceType.raml
-    collectionMemberResource: !include resourceTypes/collectionMemberResourceType.raml
+    collectionResource: !include resourceTypes/collectionResourceType.raml # A set of common base type definitions 
+    collectionMemberResource: !include resourceTypes/collectionMemberResourceType.raml # A set of common base type definitions 
 traits:
-    pageable: !include traits/pageableTrait.raml
-    sortable: !include traits/sortableTrait.raml
+    pageable: !include traits/pageableTrait.raml # A set of common base type definitions 
+    sortable: !include traits/sortableTrait.raml # A set of common base type definitions 
 types:
     lineItem:
         type: object

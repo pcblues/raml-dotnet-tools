@@ -301,7 +301,7 @@ namespace Raml.Common
             if (index == -1)
                 return includeSource;
 
-            return includeSource.Substring(index);
+            return includeSource.Substring(0, index);
         }
 
         private static string ResolveFullPath(string path, string relativePath, string includeSource)
