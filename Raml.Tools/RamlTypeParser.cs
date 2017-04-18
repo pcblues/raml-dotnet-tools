@@ -373,7 +373,7 @@ namespace Raml.Tools
                     {
                         if (NetTypeMapper.IsPrimitiveType(kv.Value.Array.Items.Type))
                         {
-                            type = NetTypeMapper.Map(kv.Value.Array.Items.Type);
+                            type = CollectionTypeHelper.GetCollectionType(NetTypeMapper.Map(kv.Value.Array.Items.Type));
                         }
                         else
                         {

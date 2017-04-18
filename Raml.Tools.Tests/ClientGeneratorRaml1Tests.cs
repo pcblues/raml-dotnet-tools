@@ -138,6 +138,20 @@ namespace Raml.Tools.Tests
             Assert.AreEqual(3, model.Objects.First(o => o.Name == "Person").Properties.Count);
         }
 
+        [Test]
+        public async Task ShouldHandleArrayItemAsScalar()
+        {
+            var model = await BuildModel("files/raml1/array-scalar-item.raml");
+            Assert.IsNotNull(model);
+        }
+
+        [Test]
+        public async Task ShouldHandleArrayAsExpression()
+        {
+            var model = await BuildModel("files/raml1/array-type-expression.raml");
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("string"), model.Objects.First().Properties.First().Type);
+        }
+
         private static async Task<ClientGeneratorModel> GetAnnotationTargetsModel()
         {
             return await BuildModel("files/raml1/annotations-targets.raml");

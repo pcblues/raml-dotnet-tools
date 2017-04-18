@@ -119,6 +119,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="files\raml1\array-scalar-item.raml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="files\raml1\array-type-expression.raml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="node_modules\raml-1-0-parser\node_modules\raml-definition-system\node_modules\raml-typesystem\.npmignore" />
     <None Include="node_modules\raml-1-0-parser\node_modules\raml-definition-system\node_modules\raml-typesystem\.travis.yml" />
     <Content Include="node_modules\raml-1-0-parser\node_modules\raml-definition-system\node_modules\raml-typesystem\node_modules\lrucache\LICENSE">
