@@ -234,6 +234,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <None Include="edge\x64\edge_nativeclr.node" />
+    <None Include="edge\x86\edge_nativeclr.node" />
     <None Include="MetadataPackage\Content\wwwroot\examples\array.raml" />
     <None Include="MetadataPackage\Content\wwwroot\examples\box.raml" />
     <None Include="MetadataPackage\Content\wwwroot\examples\discriminator.raml" />
@@ -412,14 +414,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="edge\x86\node.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="edge\x64\edge.node">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="edge\x86\edge.node">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -15032,7 +15026,7 @@
     <Folder Include="node_modules\raml-1-0-parser\node_modules\raml-definition-system\node_modules\raml-typesystem\typings\main\ambient\underscore\" />
     <Folder Include="node_modules\raml-1-0-parser\node_modules\raml-definition-system\node_modules\raml-typesystem\typings\main\ambient\xml2js\" />
     <Folder Include="node_modules\raml-1-0-parser\node_modules\raml-xml-validation\src\" />
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
   </ItemGroup>
