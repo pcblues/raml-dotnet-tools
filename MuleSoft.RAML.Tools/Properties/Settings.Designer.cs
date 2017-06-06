@@ -268,7 +268,7 @@ namespace MuleSoft.RAML.Tools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4.0.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6.5.1")]
         public string EdgePackageVersion {
             get {
                 return ((string)(this["EdgePackageVersion"]));
