@@ -143,6 +143,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="license.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="MetadataPackage\Content\wwwroot\authentication\oauth1.html" />
     <Content Include="MetadataPackage\Content\wwwroot\authentication\oauth2.html" />
     <Content Include="MetadataPackage\Content\wwwroot\favicon.ico">
