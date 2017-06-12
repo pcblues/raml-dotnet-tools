@@ -58,7 +58,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EdgeJs, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-
       <HintPath>..\packages\Edge.js.6.5.1\lib\net40\EdgeJs.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -69,7 +68,7 @@
     <Reference Include="Raml.Api.Core, Version=0.9.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RAML.Api.Core.0.9.10\lib\net45\Raml.Api.Core.dll</HintPath>
       <Private>True</Private>
-
+    </Reference>
     <Reference Include="Raml.Parser, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Raml.Parser.1.0.6.0\lib\net45\Raml.Parser.dll</HintPath>
       <Private>True</Private>
