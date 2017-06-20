@@ -4,7 +4,7 @@
 
 :!numbered:
 
-The RAML Tools for .NET allows developers to easily integrate and consume APIs that expose a RAML definition, or create a new ASP.NET implementation using a contract-first approach from a previously created RAML definition. See http://raml.org for information on RAML (RESTful API Markup Language).
+The RAML Tools for .NET allows developers to easily integrate and consume APIs that expose a RAML definition, or create a new ASP.NET implementation using a contract-first approach from a previously created RAML definition. See http://raml.org for information on RAML (RESTful API Markup Language). 
 
 The tools are provided as a Visual Studio extension, allowing simple and natural integration of RAML into a normal development workflow.
 
