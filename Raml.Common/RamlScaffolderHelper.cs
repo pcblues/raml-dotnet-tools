@@ -10,6 +10,7 @@ namespace Raml.Common
     {
         public static RamlData GetRamlData(string ramlSource, string targetNamespace)
         {
+            var logger = new Logger();
             try
             {
                 var ramlInfo = RamlInfoService.GetRamlInfo(ramlSource);
@@ -30,7 +31,7 @@ namespace Raml.Common
             }
             catch (Exception ex)
             {
-                ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                     VisualStudioAutomationHelper.GetExceptionInfo(ex));
                 var errorMessage = ex.Message;
                 if (ex.InnerException != null)
