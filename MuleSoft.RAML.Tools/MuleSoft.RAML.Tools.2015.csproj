@@ -105,24 +105,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="edge\x64\edge_nativeclr.node">
+    <Content Include="edge\x64\edge_nativeclr.node">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="edge\x86\edge_nativeclr.node">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="edge\x86\edge_nativeclr.node">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="Key.snk" />
     <Content Include="edge\double_edge.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="edge\edge.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="edge\x64\node.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="edge\x86\node.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="license.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
