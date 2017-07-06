@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MuleSoft.RAML.Tools.2015", "MuleSoft.RAML.Tools\MuleSoft.RAML.Tools.2015.csproj", "{41DDAACC-EA9B-4BAB-B52A-AD537F787D37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MuleSoft.RAML.Tools", "MuleSoft.RAML.Tools\MuleSoft.RAML.Tools.csproj", "{41DDAACC-EA9B-4BAB-B52A-AD537F787D37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raml.Common", "Raml.Common\Raml.Common.csproj", "{05A60B40-E199-435D-99A4-0DD7637F5690}"
 EndProject
