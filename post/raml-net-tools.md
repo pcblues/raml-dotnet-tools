@@ -21,9 +21,11 @@ Also, exposing your API as RAML will let you generate a c# client proxy that you
 
 ## Generate a client proxy from a RAML spec
 
+If you need to consume an API that has a RAML spec, you can use the visual studio extension or the CLI tool to generate a client proxy. Check [Mulesoft's Anypoint Exchange](https://www.mulesoft.com/exchange#!/?types=RAML) to find RAML specifications for many popular services like GitHub, Google Contacts, Yammer, Salesforce and many more.
 
 ## RAML CLI Tool
 
+The CLI tool takes a RAML as input and can generate ASP.NET Core or WebAPI 2 scaffold code or, just the model classes or a client proxy to consume the REST API.
 
 
 ## More info
