@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Raml.Common;
 using Raml.Parser.Expressions;
+using Raml.Tools.Pluralization;
 
 namespace Raml.Tools
 {
@@ -107,11 +108,14 @@ namespace Raml.Tools
             properties.Add(property);
         }
 
-        protected string GetComment(Resource resource, BasicInfo method)
+        protected string GetComment(Resource resource, Method method, string url)
         {
             var description = resource.Description;
             if (!string.IsNullOrWhiteSpace(method.Description))
                 description += string.IsNullOrWhiteSpace(description) ? method.Description : ". " + method.Description;
+
+            if(description != null)
+                description = new SchemaParameterParser(new EnglishPluralizationService()).Parse(description, resource, method, url);
 
             description = ParserHelpers.RemoveNewLines(description);
 

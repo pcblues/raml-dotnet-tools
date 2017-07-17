@@ -369,6 +369,31 @@ namespace Raml.Tools.Tests
             Assert.AreEqual("{applicationId}", model.Controllers.First().Methods.Last(m => m.UriParameters.Any()).Url);
         }
 
+        [Test]
+        public async Task ShouldHandleTraitsInLibraries()
+        {
+            var model = await BuildModel("files/raml1/lib-traits.raml");
+            Assert.AreEqual(2, model.Controllers.First().Methods.First().QueryParameters.Count);
+            Assert.AreEqual("Year", model.Controllers.First().Methods.First().QueryParameters.First().Name);
+        }
+
+        [Test]
+        public async Task ShouldHandleNullDescription()
+        {
+            var model = await BuildModel("files/service-test.raml");
+            Assert.AreEqual(2, model.Controllers.Count());
+        }
+
+        [Test]
+        public async Task ShouldHandleAnyType()
+        {
+            var model = await BuildModel("files/raml1/anytype.raml");
+            Assert.AreEqual(2, model.Controllers.Count());
+            Assert.AreEqual(2, model.Objects.Count());
+            Assert.AreEqual("object", model.Objects.First(o => o.Name == "Foo").Properties.First(p => p.Name == "Anobj").Type);
+            Assert.AreEqual("object", model.Objects.First(o => o.Name != "Foo").Properties.First(p => p.Name == "Baz").Type);
+        }
+
         private static async Task<WebApiGeneratorModel> GetAnnotationTargetsModel()
         {
             return await BuildModel("files/raml1/annotations-targets.raml");
