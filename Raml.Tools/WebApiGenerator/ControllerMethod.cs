@@ -25,6 +25,8 @@ namespace Raml.Tools.WebApiGenerator
 
         public bool UseSecurity { get; set; }
 
+        public IEnumerable<string> SecuredBy { get; set; }
+
         public string ParametersString
         {
             get
