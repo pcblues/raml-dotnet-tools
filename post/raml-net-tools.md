@@ -12,6 +12,7 @@ In this scenario the [RAML Tools Visual studio extension](https://marketplace.vi
 This can be donne incrementally, each time you add a new part of the API or flesh out new details of a particular resource the tool will update the code. The generated code is separated from your implementation and thus will not overwrite your code.
 
 Or if you already have written your RAML specification, you can import it and the ASP.NET scaffold code to implement your REST API will be generated for you.
+![RAML Tools for .NET extension](https://github.com/mulesoft-labs/raml-dotnet-tools/raw/master/docimages/RAML_NET_AddRAMLReference.png)
 
 ## Extract a RAML spec from your existing API
 
@@ -35,4 +36,5 @@ Type **RAMLGen** and hit enter on the command line to get a help screen with the
 ## More info
 
 - [RAML tools for .NET](https://github.com/mulesoft-labs/raml-dotnet-tools/)
+- [RAML CLI Tool](https://github.com/mulesoft-labs/raml-dotnet-tools/tree/master/command-line)
 - [RAML.org site](https://raml.org/)
