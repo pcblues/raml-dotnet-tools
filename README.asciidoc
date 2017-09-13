@@ -53,7 +53,7 @@ Contents:
 You can generate API client code from a RAML definition, which lets client applications consume existing APIs from a RAML definition.
 
 In Visual Studio .NET, you can add a reference to a RAML definition, and a strongly-typed client proxy is generated in the project. A local copy of the RAML definition stores as a file within the Visual Studio project, which is kept in sync with the original RAML definition.
-
+ 
 If the remote API does not provide a RAML definition, you can use a self-managed local definition to allow rapid generation of the client code in a declarative manner.
 
 === ASP.NET Implementation from a RAML Definition
