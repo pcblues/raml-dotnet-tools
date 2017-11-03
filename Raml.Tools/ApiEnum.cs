@@ -10,10 +10,10 @@ namespace Raml.Tools
     {
         public ApiEnum()
         {
-            Values = new Collection<string>();
+            Values = new Collection<PropertyBase>();
         }
         public string Name { get; set; }
-        public ICollection<string> Values { get; set; }
+        public ICollection<PropertyBase> Values { get; set; }
         public string Description { get; set; }
     }
 }

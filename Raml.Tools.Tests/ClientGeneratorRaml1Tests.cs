@@ -4,7 +4,6 @@ using Raml.Parser;
 using Raml.Tools.ClientGenerator;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Raml.Tools.Tests
 {
@@ -127,7 +126,9 @@ namespace Raml.Tools.Tests
         public async Task ShouldHandleEnums()
         {
             var model = await BuildModel("files/raml1/enums.raml");
-            Assert.AreEqual(2, model.Enums.Count());
+            Assert.AreEqual(3, model.Enums.Count());
+            Assert.AreEqual("N1_year", model.Enums.First(e => e.Name == "Something").Values.First().Name);
+            Assert.AreEqual("two_years", model.Enums.First(e => e.Name == "Something").Values.First().Name);
         }
 
         [Test]

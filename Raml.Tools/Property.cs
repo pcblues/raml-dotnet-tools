@@ -7,27 +7,8 @@ using System.Net;
 namespace Raml.Tools
 {
     [Serializable]
-    public class Property
+    public class Property : PropertyBase
     {
-        private readonly string[] reservedWords = { "ref", "out", "in", "base", "long", "int", "short", "bool", "string", "decimal", "float", "double" };
-        private string name;
-
-        
-
-        public string Name
-        {
-            get
-            {
-                if (reservedWords.Contains(name.ToLowerInvariant()))
-                    return "Ip" + name.ToLowerInvariant();
-
-                return name;
-            }
-
-            set { name = value; }
-        }
-
-        public string OriginalName { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }
         public string Example { get; set; }
@@ -37,10 +18,7 @@ namespace Raml.Tools
         public string JSONSchema { get; set; }
         public bool IsEnum { get; set; }
 
-        public bool IsAdditionalProperties
-        {
-            get { return Name == "AdditionalProperties" && Type == "IDictionary<string, object>"; }
-        }
+        public bool IsAdditionalProperties => Name == "AdditionalProperties" && Type == "IDictionary<string, object>";
 
         public int? MaxLength { get; set; }
         public int? MinLength { get; set; }
