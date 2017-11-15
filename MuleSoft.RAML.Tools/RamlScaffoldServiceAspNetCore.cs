@@ -5,6 +5,8 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using MuleSoft.RAML.Tools.Properties;
 using Raml.Common;
+using Microsoft.VisualStudio.ComponentModelHost;
+using NuGet.VisualStudio;
 
 namespace MuleSoft.RAML.Tools
 {
@@ -24,7 +26,7 @@ namespace MuleSoft.RAML.Tools
             var dte = ServiceProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            InstallNugetDependencies(proj, newtonsoftJsonForCorePackageVersion);
+            InstallDependencies(proj, newtonsoftJsonForCorePackageVersion);
 
             var folderItem = VisualStudioAutomationHelper.AddFolderIfNotExists(proj, ContractsFolderName);
             var contractsFolderPath = Path.GetDirectoryName(proj.FullName) + Path.DirectorySeparatorChar + ContractsFolderName + Path.DirectorySeparatorChar;
@@ -40,6 +42,25 @@ namespace MuleSoft.RAML.Tools
             else
             {
                 AddContractFromFile(folderItem, contractsFolderPath, parameters);
+            }
+        }
+
+        private void InstallDependencies(Project proj, string newtonsoftJsonForCorePackageVersion)
+        {
+            var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
+            var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            var installer = componentModel.GetService<IVsPackageInstaller>();
+
+            var packs = installerServices.GetInstalledPackages(proj).ToArray();
+
+            InstallNugetDependencies(proj, newtonsoftJsonForCorePackageVersion);
+
+            // RAML.NetCore.APICore
+            var ramlNetCoreApiCorePackageId = "RAML.NetCore.APICore";
+            var ramlNetCoreApiCorePackageVersion = "0.1.0";
+            if (!installerServices.IsPackageInstalled(proj, ramlNetCoreApiCorePackageId))
+            {
+                installer.InstallPackage(nugetPackagesSource, proj, ramlNetCoreApiCorePackageId, ramlNetCoreApiCorePackageVersion, false);
             }
         }
 

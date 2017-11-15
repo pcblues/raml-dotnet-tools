@@ -6,12 +6,18 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using MuleSoft.RAML.Tools.Properties;
 using Raml.Common;
+using Microsoft.VisualStudio.ComponentModelHost;
+using NuGet.VisualStudio;
 
 namespace MuleSoft.RAML.Tools
 {
     public class RamlScaffoldServiceWebApi : RamlScaffoldServiceBase
     {
         private readonly string newtonsoftJsonPackageVersion = Settings.Default.NewtonsoftJsonPackageVersion;
+        private readonly string microsoftNetHttpPackageId = Settings.Default.MicrosoftNetHttpPackageId;
+        private readonly string microsoftNetHttpPackageVersion = Settings.Default.MicrosoftNetHttpPackageVersion;
+        private readonly string ramlApiCorePackageId = Settings.Default.RAMLApiCorePackageId;
+        private readonly string ramlApiCorePackageVersion = Settings.Default.RAMLApiCorePackageVersion;
 
         public override string TemplateSubFolder
         {
@@ -20,12 +26,33 @@ namespace MuleSoft.RAML.Tools
 
         public RamlScaffoldServiceWebApi(IT4Service t4Service, IServiceProvider serviceProvider): base(t4Service, serviceProvider){}
 
+        protected void InstallDependencies(Project proj, string packageVersion)
+        {
+            var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
+            var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            var installer = componentModel.GetService<IVsPackageInstaller>();
+
+            var packs = installerServices.GetInstalledPackages(proj).ToArray();
+
+            // RAML.Api.Core dependencies
+            NugetInstallerHelper.InstallPackageIfNeeded(proj, packs, installer, microsoftNetHttpPackageId, microsoftNetHttpPackageVersion, Settings.Default.NugetExternalPackagesSource);
+
+            InstallNugetDependencies(proj, packageVersion);
+
+            // RAML.Api.Core
+            if (!installerServices.IsPackageInstalled(proj, ramlApiCorePackageId))
+            {
+                installer.InstallPackage(nugetPackagesSource, proj, ramlApiCorePackageId, ramlApiCorePackageVersion, false);
+            }
+        }
+
         public override void AddContract(RamlChooserActionParams parameters)
         {
             var dte = ServiceProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            InstallNugetDependencies(proj, newtonsoftJsonPackageVersion);
+            InstallDependencies(proj, newtonsoftJsonPackageVersion);
+
             AddXmlFormatterInWebApiConfig(proj);
 
             var folderItem = VisualStudioAutomationHelper.AddFolderIfNotExists(proj, ContractsFolderName);

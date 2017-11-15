@@ -28,7 +28,7 @@ namespace Raml.Common
             var dte = serviceProvider.GetService(typeof(SDTE)) as DTE;
             var project = GetActiveProject(dte);
 
-            var namespaceProperty = VisualStudioAutomationHelper.IsAVisualStudio2015Project(project) ?  "RootNamespace" : "DefaultNamespace";
+            var namespaceProperty = IsJsonOrXProj(project) ?  "RootNamespace" : "DefaultNamespace";
             return project.Properties.Item(namespaceProperty).Value.ToString();
         }
 
@@ -48,7 +48,7 @@ namespace Raml.Common
             if (projectItem != null)
                 return projectItem;
 
-            if (!IsAVisualStudio2015Project(proj) && Directory.Exists(path))
+            if (!IsJsonOrXProj(proj) && Directory.Exists(path))
                 projectItem = proj.ProjectItems.AddFromDirectory(path);
             else if(!Directory.Exists(path))
                 projectItem = proj.ProjectItems.AddFolder(folderName);
@@ -63,7 +63,7 @@ namespace Raml.Common
             if (projectItem != null)
                 return projectItem;
 
-            if (!IsAVisualStudio2015Project(projItem.ContainingProject) && Directory.Exists(path))
+            if (!IsJsonOrXProj(projItem.ContainingProject) && Directory.Exists(path))
                 projectItem = projItem.ProjectItems.AddFromDirectory(path);
             else if (!Directory.Exists(path))
                 projectItem = projItem.ProjectItems.AddFolder(folderName);
@@ -87,10 +87,38 @@ namespace Raml.Common
             return projectItem;
         }
 
-        public static bool IsAVisualStudio2015Project(Project proj)
+        public static bool IsANetCoreProject(Project proj)
         {
-            if (proj.FileName.EndsWith("xproj"))
+            if (proj.FileName.EndsWith("xproj") || proj.FileName.EndsWith("json"))
                 return true;
+
+            //.NETCoreApp,Version = v2.0
+            //.NETCoreApp,Version = v1.1
+            //.NETFramework,Version = v4.6.1
+            Property targetFwkObj;
+            try
+            {
+                targetFwkObj = proj.Properties.Item("TargetFrameworkMoniker"); //var targetFwkObj = proj.Properties.Item("TargetFramework");
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Cannot determine .net framework. TargetFrameworkMoniker not present.", ex);
+            }
+            var targetFramework = (targetFwkObj.Value as string).ToLowerInvariant();
+            if (targetFramework.Contains("netcore") || targetFramework.Contains("netstandard"))
+                return true;
+
+            if (targetFramework.Contains("netframework"))
+                return false;
+
+            throw new InvalidOperationException("Cannot determine .net framework. " + targetFramework);
+        }
+
+        public static bool IsJsonOrXProj(Project proj)
+        {
+            if (proj.FileName.EndsWith("xproj") || proj.FileName.EndsWith("json"))
+                return true;
+
             return false;
         }
 
