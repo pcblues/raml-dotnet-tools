@@ -57,7 +57,7 @@ namespace MuleSoft.RAML.Tools
 
             // RAML.NetCore.APICore
             var ramlNetCoreApiCorePackageId = "RAML.NetCore.APICore";
-            var ramlNetCoreApiCorePackageVersion = "0.1.0";
+            var ramlNetCoreApiCorePackageVersion = "0.0.1";
             if (!installerServices.IsPackageInstalled(proj, ramlNetCoreApiCorePackageId))
             {
                 installer.InstallPackage(nugetPackagesSource, proj, ramlNetCoreApiCorePackageId, ramlNetCoreApiCorePackageVersion, false);
