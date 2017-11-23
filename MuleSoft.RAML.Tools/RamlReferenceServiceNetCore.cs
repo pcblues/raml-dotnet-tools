@@ -130,9 +130,7 @@ namespace MuleSoft.RAML.Tools
 
         private static string GetProjectFilePath(Project proj)
         {
-            var path = Path.GetDirectoryName(proj.FileName);
-            var projectFile = Path.Combine(path, "project.json");
-            return projectFile;
+            return proj.FileName;
         }
 
     }

@@ -14,13 +14,15 @@ namespace Raml.Common
 
             string tempPath;
 
+            var logger = new Logger();
+
             if (ramlSource.StartsWith("http"))
             {
                 Uri uri;
                 if (!Uri.TryCreate(ramlSource, UriKind.Absolute, out uri))
                 {
                     info.ErrorMessage = "Invalid Url specified: " + uri.AbsoluteUri;
-                    ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource, info.ErrorMessage);
+                    logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource, info.ErrorMessage);
                     return info;
                 }
 
@@ -47,7 +49,7 @@ namespace Raml.Common
 
                     info.ErrorMessage = errorMessage;
 
-                    ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                    logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                         VisualStudioAutomationHelper.GetExceptionInfo(rex));
 
                     return info;
@@ -60,7 +62,7 @@ namespace Raml.Common
 
                     info.ErrorMessage = "Error when trying to load specified url " + uri.AbsoluteUri + ". " + errorMessage;
 
-                    ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                    logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                         VisualStudioAutomationHelper.GetExceptionInfo(ex));
 
                     return info;
@@ -89,7 +91,7 @@ namespace Raml.Common
 
                     info.ErrorMessage = "Error when trying to read file " + ramlSource + ". " + errorMessage;
 
-                    ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                    logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                         VisualStudioAutomationHelper.GetExceptionInfo(ex));
 
                     return info;

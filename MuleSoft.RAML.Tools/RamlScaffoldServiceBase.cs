@@ -28,15 +28,9 @@ namespace MuleSoft.RAML.Tools
         private static readonly string ContractsFolder = Path.DirectorySeparatorChar + Settings.Default.ContractsFolderName + Path.DirectorySeparatorChar;
         private static readonly string IncludesFolder = Path.DirectorySeparatorChar + "includes" + Path.DirectorySeparatorChar;
 
-        private readonly string nugetPackagesSource = Settings.Default.NugetPackagesSource;
-        private readonly string ramlApiCorePackageId = Settings.Default.RAMLApiCorePackageId;
-        private readonly string ramlApiCorePackageVersion = Settings.Default.RAMLApiCorePackageVersion;
+        protected readonly string nugetPackagesSource = Settings.Default.NugetPackagesSource;
         private readonly string newtonsoftJsonPackageId = Settings.Default.NewtonsoftJsonPackageId;
         
-        
-        private readonly string microsoftNetHttpPackageId = Settings.Default.MicrosoftNetHttpPackageId;
-        private readonly string microsoftNetHttpPackageVersion = Settings.Default.MicrosoftNetHttpPackageVersion;
-
         private readonly CodeGenerator codeGenerator;
 
         protected readonly string ContractsFolderName = Settings.Default.ContractsFolderName;
@@ -127,16 +121,9 @@ namespace MuleSoft.RAML.Tools
 
             // RAML.Api.Core dependencies
             NugetInstallerHelper.InstallPackageIfNeeded(proj, packs, installer, newtonsoftJsonPackageId, packageVersion, Settings.Default.NugetExternalPackagesSource);
-            NugetInstallerHelper.InstallPackageIfNeeded(proj, packs, installer, microsoftNetHttpPackageId, microsoftNetHttpPackageVersion, Settings.Default.NugetExternalPackagesSource);
 
             // System.Xml.XmlSerializer 4.0.11-beta-23516
             // NugetInstallerHelper.InstallPackageIfNeeded(proj, packs, installer, "System.Xml.XmlSerializer", "4.0.11-beta-23516");
-
-            // RAML.Api.Core
-            if (!installerServices.IsPackageInstalled(proj, ramlApiCorePackageId))
-            {
-                installer.InstallPackage(nugetPackagesSource, proj, ramlApiCorePackageId, ramlApiCorePackageVersion, false);
-            }
         }
 
 
@@ -167,7 +154,7 @@ namespace MuleSoft.RAML.Tools
             var dte = serviceProvider.GetService(typeof (SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
             RamlScaffoldServiceBase service;
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj))
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj))
                 service = new RamlScaffoldServiceAspNetCore(new T4Service(serviceProvider), serviceProvider);
             else
                 service = new RamlScaffoldServiceWebApi(new T4Service(serviceProvider), serviceProvider);

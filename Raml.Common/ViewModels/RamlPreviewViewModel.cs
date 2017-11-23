@@ -24,6 +24,7 @@ namespace Raml.Common.ViewModels
         private bool useApiVersion;
         private bool configFolders;
         private string modelsFolder;
+        private Logger logger = new Logger();
 
         public RamlPreviewViewModel(IServiceProvider serviceProvider, Action<RamlChooserActionParams> action, string ramlTempFilePath,
             string ramlOriginalSource, string ramlTitle, bool isContractUseCase)
@@ -199,7 +200,7 @@ namespace Raml.Common.ViewModels
                 catch (Exception ex)
                 {
                     ShowErrorAndStopProgress("Error while parsing raml file. " + ex.Message);
-                    ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource, VisualStudioAutomationHelper.GetExceptionInfo(ex));
+                    logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource, VisualStudioAutomationHelper.GetExceptionInfo(ex));
                 }
             });
         }
@@ -352,13 +353,13 @@ namespace Raml.Common.ViewModels
             catch (HttpRequestException rex)
             {
                 ShowErrorAndDisableOk(GetFriendlyMessage(rex));
-                ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                     VisualStudioAutomationHelper.GetExceptionInfo(rex));
             }
             catch (Exception ex)
             {
                 ShowErrorAndDisableOk(ex.Message);
-                ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                     VisualStudioAutomationHelper.GetExceptionInfo(ex));
             }
         }
@@ -468,7 +469,7 @@ namespace Raml.Common.ViewModels
             {
                 ShowErrorAndStopProgress("Error: " + ex.Message);
 
-                ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource, VisualStudioAutomationHelper.GetExceptionInfo(ex));
+                logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource, VisualStudioAutomationHelper.GetExceptionInfo(ex));
             }
         }
 
@@ -594,7 +595,7 @@ namespace Raml.Common.ViewModels
             catch (Exception ex)
             {
                 ShowErrorAndStopProgress("Error while parsing raml file. " + ex.Message);
-                ActivityLog.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
+                logger.LogError(VisualStudioAutomationHelper.RamlVsToolsActivityLogSource,
                     VisualStudioAutomationHelper.GetExceptionInfo(ex));
             }
         }

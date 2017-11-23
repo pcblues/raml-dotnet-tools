@@ -47,7 +47,7 @@ namespace MuleSoft.RAML.Tools
 
                     // var alreadyIncludedInProj = IsAlreadyIncludedInProject(templateParams.FolderPath, templateParams.FolderItem, generatedFileName, templateParams.ProjItem);
                     //if (!alreadyIncludedInProj)
-                    if(!VisualStudioAutomationHelper.IsAVisualStudio2015Project(templateParams.FolderItem.ContainingProject))
+                    if(!VisualStudioAutomationHelper.IsJsonOrXProj(templateParams.FolderItem.ContainingProject))
                         templateParams.ProjItem.ProjectItems.AddFromFile(destinationFile);
                 }
                 else
@@ -81,7 +81,7 @@ namespace MuleSoft.RAML.Tools
                 return CreateFolderItem(folderItem, folders, 1);
             }
 
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj))
+            if (VisualStudioAutomationHelper.IsJsonOrXProj(proj))
                 return null;
 
             var folderName = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1);

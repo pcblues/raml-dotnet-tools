@@ -21,7 +21,7 @@ namespace MuleSoft.RAML.Tools
 
         private static void AddFileToProject(ProjectItem contractsFolderItem, string fileName, string file)
         {
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(contractsFolderItem.ContainingProject))
+            if (VisualStudioAutomationHelper.IsJsonOrXProj(contractsFolderItem.ContainingProject))
                 return;
 
             var fileItem = contractsFolderItem.ProjectItems.Cast<ProjectItem>().FirstOrDefault(i => i.Name == fileName);
