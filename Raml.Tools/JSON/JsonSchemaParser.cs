@@ -390,10 +390,10 @@ namespace Raml.Tools.JSON
                 && (propertySchema.Type == Newtonsoft.JsonV4.Schema.JsonSchemaType.Object || propertySchema.Type.Value.ToString().Contains("Object")) 
                 && (propertySchema.OneOf == null || propertySchema.OneOf.Count == 0 || schema.Definitions == null || schema.Definitions.Count == 0))
             {
-                if (schema != null && !string.IsNullOrWhiteSpace(schema.Id) && ids.Contains(schema.Id))
+                if (!string.IsNullOrWhiteSpace(schema?.Id) && ids.Contains(schema.Id))
                     return;
 
-                if (schema != null && !string.IsNullOrWhiteSpace(schema.Id))
+                if (!string.IsNullOrWhiteSpace(schema?.Id))
                     ids.Add(schema.Id);
 
                 var type = string.IsNullOrWhiteSpace(property.Value.Id) ? property.Key : property.Value.Id;
@@ -553,7 +553,7 @@ namespace Raml.Tools.JSON
             {
                 Name = name,
                 Description = description,
-                Values = schema.Enum.Select(e => NetNamingMapper.GetEnumValueName(e.ToString())).ToList()
+                Values = schema.Enum.Select(e => RamlTypeParser.ToEnumValueName(e.ToString())).ToList()
             };
 
             if (enums.ContainsKey(name))
@@ -577,7 +577,7 @@ namespace Raml.Tools.JSON
             {
                 Name = name,
                 Description = description,
-                Values = schema.Enum.Select(e => NetNamingMapper.GetEnumValueName(e.ToString())).ToList()
+                Values = schema.Enum.Select(e => RamlTypeParser.ToEnumValueName(e.ToString())).ToList()
             };
 
             if (enums.ContainsKey(name))

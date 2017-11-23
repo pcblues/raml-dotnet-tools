@@ -1072,7 +1072,17 @@ foreach (var apiEnum in model.Enums)
 	
 	public enum <#= apiEnum.Name #>
 	{
-		<#= string.Join(", ", apiEnum.Values) #>
+<#
+	var i = 1;
+	foreach (var property in apiEnumValues)
+	{
+#>
+		[JsonProperty("<#= property.OriginalName #>")]
+		<#= property.Name #><#= i < apiEnumValues.Count() ? "," : string.Empty #>
+<#	
+		i++;
+	}
+#>
     }
 
 <#

@@ -64,7 +64,7 @@ namespace Raml.Tools
                 Parameter = GetParameter(GeneratorServiceHelper.GetKeyForResource(method, resource, parentUrl), method, resource, url),
                 UriParameters = uriParametersGenerator.GetUriParameters(resource, url, parentUriParameters),
                 ReturnType = GetReturnType(GeneratorServiceHelper.GetKeyForResource(method, resource, parentUrl), method, resource, url),
-                Comment = GetComment(resource, method),
+                Comment = GetComment(resource, method, url),
                 Url = relativeUri,
                 Verb = NetNamingMapper.Capitalize(method.Verb),
                 Parent = null,

@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiEnum.cs" />
+    <Compile Include="PropertyBase.cs" />
     <Compile Include="ApiObject.cs" />
     <Compile Include="ApiObjectsCleaner.cs" />
     <Compile Include="RamlTypeParser.cs" />
