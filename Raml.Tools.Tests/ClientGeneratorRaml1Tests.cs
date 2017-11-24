@@ -127,8 +127,8 @@ namespace Raml.Tools.Tests
         {
             var model = await BuildModel("files/raml1/enums.raml");
             Assert.AreEqual(3, model.Enums.Count());
-            Assert.AreEqual("N1_year", model.Enums.First(e => e.Name == "Something").Values.First().Name);
-            Assert.AreEqual("two_years", model.Enums.First(e => e.Name == "Something").Values.First().Name);
+            Assert.AreEqual("E1_year", model.Enums.First(e => e.Name == "Something").Values.First().Name);
+            Assert.AreEqual("two_years", model.Enums.First(e => e.Name == "Something").Values.Last().Name);
         }
 
         [Test]

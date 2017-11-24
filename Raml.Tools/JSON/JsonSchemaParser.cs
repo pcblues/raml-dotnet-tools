@@ -600,7 +600,7 @@ namespace Raml.Tools.JSON
                 if(apiEnum.Values.Count != @enum.Value.Values.Count)
                     continue;
 
-                if (apiEnum.Values.Any(x => !@enum.Value.Values.Contains(x)))
+                if (apiEnum.Values.Any(x => !@enum.Value.Values.Any(y => y.OriginalName == x.OriginalName)))
                     continue;
 
                 return true;
