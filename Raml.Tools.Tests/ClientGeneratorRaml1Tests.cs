@@ -4,7 +4,6 @@ using Raml.Parser;
 using Raml.Tools.ClientGenerator;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Raml.Tools.Tests
 {
@@ -127,7 +126,9 @@ namespace Raml.Tools.Tests
         public async Task ShouldHandleEnums()
         {
             var model = await BuildModel("files/raml1/enums.raml");
-            Assert.AreEqual(2, model.Enums.Count());
+            Assert.AreEqual(3, model.Enums.Count());
+            Assert.AreEqual("E1_year", model.Enums.First(e => e.Name == "Something").Values.First().Name);
+            Assert.AreEqual("two_years", model.Enums.First(e => e.Name == "Something").Values.Last().Name);
         }
 
         [Test]
@@ -136,6 +137,20 @@ namespace Raml.Tools.Tests
             var model = await BuildModel("files/raml1/shortcuts.raml");
             Assert.AreEqual(2, model.Objects.Count());
             Assert.AreEqual(3, model.Objects.First(o => o.Name == "Person").Properties.Count);
+        }
+
+        [Test]
+        public async Task ShouldHandleArrayItemAsScalar()
+        {
+            var model = await BuildModel("files/raml1/array-scalar-item.raml");
+            Assert.IsNotNull(model);
+        }
+
+        [Test]
+        public async Task ShouldHandleArrayAsExpression()
+        {
+            var model = await BuildModel("files/raml1/array-type-expression.raml");
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("string"), model.Objects.First().Properties.First().Type);
         }
 
         private static async Task<ClientGeneratorModel> GetAnnotationTargetsModel()

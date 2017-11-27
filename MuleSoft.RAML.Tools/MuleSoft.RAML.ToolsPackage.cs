@@ -308,7 +308,7 @@ namespace MuleSoft.RAML.Tools
 
         private void RegenerateClientCode(string ramlFilePath)
         {
-            if (IsAVisualStudio2015Project())
+            if (IsAJsonOrXProj())
             {
                 var result = RamlClientTool.RegenerateCode(ramlFilePath, GetExtensionPath());
                 if (!result.IsSuccess)
@@ -420,10 +420,10 @@ namespace MuleSoft.RAML.Tools
             var dte = ServiceProvider.GlobalProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            if (!VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && !IsWebApiCoreInstalled(proj))
+            if (!VisualStudioAutomationHelper.IsANetCoreProject(proj) && !IsWebApiCoreInstalled(proj))
                 return;
 
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && !IsAspNet5MvcInstalled(proj))
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj) && !IsAspNet5MvcInstalled(proj))
                 return;
 
             ShowAndEnableCommand(menuCommand, true);
@@ -439,10 +439,10 @@ namespace MuleSoft.RAML.Tools
             var dte = ServiceProvider.GlobalProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            if (!VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && (!IsWebApiCoreInstalled(proj) || IsWebApiExplorerInstalled()))
+            if (!VisualStudioAutomationHelper.IsANetCoreProject(proj) && (!IsWebApiCoreInstalled(proj) || IsWebApiExplorerInstalled()))
                 return;
 
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && (!IsAspNet5MvcInstalled(proj) || IsNetCoreApiExplorerInstalled()))
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj) && (!IsAspNet5MvcInstalled(proj) || IsNetCoreApiExplorerInstalled()))
                 return;
 
             ShowAndEnableCommand(menuCommand, true);
@@ -458,10 +458,10 @@ namespace MuleSoft.RAML.Tools
             var dte = ServiceProvider.GlobalProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && !IsNetCoreApiExplorerInstalled())
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj) && !IsNetCoreApiExplorerInstalled())
                 return;
 
-            if (!VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && !IsWebApiExplorerInstalled())
+            if (!VisualStudioAutomationHelper.IsANetCoreProject(proj) && !IsWebApiExplorerInstalled())
                 return;
 
             ShowAndEnableCommand(menuCommand, true);
@@ -511,18 +511,18 @@ namespace MuleSoft.RAML.Tools
             var dte = ServiceProvider.GlobalProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            if (IsAVisualStudio2015Project())
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj))
                 return IsAspNet5MvcInstalled(proj);
 
             return IsWebApiCoreInstalled(proj);
         }
 
-        private static bool IsAVisualStudio2015Project()
+        private static bool IsAJsonOrXProj()
         {
             var dte = ServiceProvider.GlobalProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            return VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj);
+            return VisualStudioAutomationHelper.IsJsonOrXProj(proj);
         }
 
         private static bool IsWebApiCoreInstalled(Project proj)
@@ -537,6 +537,7 @@ namespace MuleSoft.RAML.Tools
         {
             var componentModel = (IComponentModel)ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel));
             var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            //net core app 2: "Microsoft.AspNetCore"
             return installerServices.IsPackageInstalled(proj, "Microsoft.AspNetCore.Mvc");
         }
 
@@ -609,7 +610,7 @@ namespace MuleSoft.RAML.Tools
             var dte = ServiceProvider.GlobalProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
 
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj) && !IsAspNet5MvcInstalled(proj))
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj) && !IsAspNet5MvcInstalled(proj))
                 return;
 
             ShowAndEnableCommand(menuCommand, true);

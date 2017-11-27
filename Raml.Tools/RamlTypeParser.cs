@@ -235,20 +235,14 @@ namespace Raml.Tools
             throw new InvalidOperationException("Cannot determine type of scalar " + ramlType.Name);
         }
 
-        private static List<string> GetEnumValues(Parameter scalar)
+        private static List<PropertyBase> GetEnumValues(Parameter scalar)
         {
-            return scalar.Enum.Select(ConvertToString).ToList();
+            return scalar.Enum.Select(ToEnumValueName).ToList();
         }
 
-        private static string ConvertToString(string v)
+        public static PropertyBase ToEnumValueName(string value)
         {
-            return StartsWithNumber(v) ? "N" + v : v;
-        }
-
-        private static bool StartsWithNumber(string v)
-        {
-            int num;
-            return int.TryParse(v.Substring(0, 1), out num);
+            return new PropertyBase { OriginalName = value, Name = NetNamingMapper.GetEnumValueName(value) };
         }
 
         private ApiObject ParseExternal(string key, RamlType ramlType)
@@ -373,7 +367,7 @@ namespace Raml.Tools
                     {
                         if (NetTypeMapper.IsPrimitiveType(kv.Value.Array.Items.Type))
                         {
-                            type = NetTypeMapper.Map(kv.Value.Array.Items.Type);
+                            type = CollectionTypeHelper.GetCollectionType(NetTypeMapper.Map(kv.Value.Array.Items.Type));
                         }
                         else
                         {

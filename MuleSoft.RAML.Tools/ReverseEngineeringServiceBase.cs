@@ -28,7 +28,7 @@ namespace MuleSoft.RAML.Tools
             var dte = serviceProvider.GetService(typeof(SDTE)) as DTE;
             var proj = VisualStudioAutomationHelper.GetActiveProject(dte);
             ReverseEngineeringServiceBase service;
-            if (VisualStudioAutomationHelper.IsAVisualStudio2015Project(proj))
+            if (VisualStudioAutomationHelper.IsANetCoreProject(proj))
                 service = new ReverseEngineeringAspNetCore(serviceProvider);
             else
                 service = new ReverseEngineeringServiceWebApi(serviceProvider);

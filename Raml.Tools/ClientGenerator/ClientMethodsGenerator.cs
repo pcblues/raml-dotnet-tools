@@ -100,7 +100,7 @@ namespace Raml.Tools.ClientGenerator
                 Name = NetNamingMapper.GetMethodName(method.Verb ?? "Get" + resource.RelativeUri),
                 ReturnType = GetReturnType(GeneratorServiceHelper.GetKeyForResource(method, resource, parentUrl), method, resource, url),
                 Parameter = GetParameter(GeneratorServiceHelper.GetKeyForResource(method, resource, parentUrl), method, resource, url),
-                Comment = GetComment(resource, method),
+                Comment = GetComment(resource, method, url),
                 Url = url,
                 Verb = NetNamingMapper.Capitalize(method.Verb),
                 Parent = null,
