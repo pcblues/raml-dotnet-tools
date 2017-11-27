@@ -380,7 +380,9 @@
     </VSCTCompile>
     <Content Include="Resources\Command1.png" />
     <Content Include="Resources\Images.png" />
-    <Content Include="Resources\MuleSoft-Logo.png" />
+    <Content Include="Resources\MuleSoft-Logo.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Package.ico" />
     <Content Include="Resources\VSPackage1.ico" />
     <Content Include="stylesheet.css" />
