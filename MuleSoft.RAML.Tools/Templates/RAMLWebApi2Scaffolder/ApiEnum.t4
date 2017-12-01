@@ -29,7 +29,7 @@ namespace $(namespace).Models
 #>
     public enum <#= apiEnum.Name #>
     {
-		<#= string.Join(", ", apiEnum.Values) #>    
+		<#= string.Join(", ", apiEnum.Values.Select(e => e.Name).ToList()) #>    
     }
 
 }
