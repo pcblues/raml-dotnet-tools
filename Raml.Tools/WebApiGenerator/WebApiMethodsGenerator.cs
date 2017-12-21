@@ -58,8 +58,6 @@ namespace Raml.Tools
 
             var parentUrl = UrlGeneratorHelper.GetParentUri(url, resource.RelativeUri);
 
-            string b = resource.Methods.FirstOrDefault(m => m.Verb == method.Verb && m.SecuredBy != null && m.SecuredBy.Any()).SecuredBy.FirstOrDefault();
-
             return new ControllerMethod
             {
                 Name = NetNamingMapper.GetMethodName(method.Verb ?? "Get" + resource.RelativeUri),
