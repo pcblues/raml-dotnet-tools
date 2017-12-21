@@ -199,6 +199,9 @@ namespace Raml.Tools.JSON
         {
             var properties = schema.Properties;
 
+            if (properties == null)
+                return;
+
             foreach (var property in properties)
             {
                 if ((property.Value.Enum != null && !property.Value.Enum.Any()) && (property.Value.Type == null || property.Value.Type == Newtonsoft.JsonV4.Schema.JsonSchemaType.Null ||
