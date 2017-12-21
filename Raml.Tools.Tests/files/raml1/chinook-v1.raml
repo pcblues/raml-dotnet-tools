@@ -37,6 +37,8 @@ types:
         type: Person
         properties:
           Company:
+          CustomerStatus:
+            enum: [standard, gold, premium]
   Artist:
     properties:
           Id: 
@@ -52,6 +54,7 @@ types:
             "Name": "Pearl Jam"
           }
   Album:
+    description: this is the Album RAML type description
     properties:
         Artist:
           type: Artist
@@ -118,6 +121,7 @@ types:
               type: Track[]
 /customers:
   get:
+    description: this is the customers get description
     responses:
       200:   
         body:
