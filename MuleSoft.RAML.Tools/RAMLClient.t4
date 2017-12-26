@@ -1074,11 +1074,11 @@ foreach (var apiEnum in model.Enums)
 	{
 <#
 	var i = 1;
-	foreach (var property in apiEnumValues)
+	foreach (var property in apiEnum.Values)
 	{
 #>
 		[JsonProperty("<#= property.OriginalName #>")]
-		<#= property.Name #><#= i < apiEnumValues.Count() ? "," : string.Empty #>
+		<#= property.Name #><#= i < apiEnum.Values.Count() ? "," : string.Empty #>
 <#	
 		i++;
 	}
