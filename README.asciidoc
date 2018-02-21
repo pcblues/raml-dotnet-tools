@@ -33,7 +33,7 @@ Contents:
 * <<Customizing the Generated Code>>
 ** <<Compatibility With New Versions of the Templates>>
 ** <<Customizing the Generated Code for the Client>>
-** <<Customizing the Generated cCode for the Asp.Net Web API>>
+** <<Customizing the Generated Code for the Asp.Net Web API>>
 * <<Metadata - Extract a RAML definition from your Web app>>
 ** <<Api Console>>
 ** <<Viewing the Raw RAML>>
@@ -460,7 +460,7 @@ In case your customized template is no longer compatible,  you are given the cho
 For the client there is a single template containing all the generated code, the *RAMLClient.t4* file is placed under "API References/Templates".
 
 
-=== Customizing the Generated cCode for the Asp.Net Web API
+=== Customizing the Generated Code for the Asp.Net Web API
 
 For the Web API there are a several templates under "Contracts/Templates":
 
