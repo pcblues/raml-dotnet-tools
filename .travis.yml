@@ -1,5 +1,0 @@
-language: csharp
-solution: RAML.NET.sln
-target: nsis
-os: osx
-osx_image: xcode8.3
