@@ -40,21 +40,6 @@ namespace Raml.Tools.Tests
         }
 
 
-        [Test, Ignore]
-        public async void Should_Generate_Controller_Objects_When_GitHub()
-        {
-            var model = await GetGitHubGeneratedModel();
-            Assert.AreEqual(17, model.Controllers.Count());
-        }
-
-
-        [Test, Ignore]
-        public async void Should_Generate_Controller_Objects_When_Instagram()
-        {
-            var model = await GetInstagramGeneratedModel();
-            Assert.AreEqual(7, model.Controllers.Count());
-        }
-
         [Test]
         public async void Should_Generate_Controller_Objects_When_Large()
         {
@@ -63,13 +48,6 @@ namespace Raml.Tools.Tests
         }
 
 
-        [Test, Ignore]
-        public async void Should_Generate_Controller_Objects_When_Regression()
-        {
-            var model = await GetRegressionGeneratedModel();
-            Assert.AreEqual(2, model.Controllers.Count());
-        }
-
         [Test]
         public async void Should_Generate_Controller_Objects_When_Test()
         {
@@ -77,28 +55,11 @@ namespace Raml.Tools.Tests
             Assert.AreEqual(2, model.Controllers.Count());
         }
 
-
-        [Test, Ignore]
-        public async void Should_Generate_Controller_Objects_When_Twitter()
-        {
-            var model = await GetTwitterGeneratedModel();
-            Assert.AreEqual(16, model.Controllers.Count());
-        }
-
         [Test]
         public async void Should_Remove_Not_Used_Objects_Dars()
         {
             var model = await GetDarsGeneratedModel();
             Assert.AreEqual(2, model.Objects.Count());
-        }
-
-
-        [Test, Ignore]
-        public async void Should_Not_Remove_Used_Objects_Twitter()
-        {
-            var model = await GetTwitterGeneratedModel();
-            Assert.IsTrue(model.Objects.Any(o => o.Name == "ContainedWithin"));
-            Assert.AreEqual(62, model.Objects.Count());
         }
 
         [Test]
@@ -140,77 +101,11 @@ namespace Raml.Tools.Tests
             Assert.AreEqual(3, model.Objects.Sum(c => c.Properties.Count));
         }
 
-
-        [Test, Ignore]
-        public async void Should_Generate_Properties_When_GitHub()
-        {
-            var model = await GetGitHubGeneratedModel();
-            Assert.AreEqual(692, model.Objects.Sum(c => c.Properties.Count));
-        }
-
-
-        [Test, Ignore]
-        public async void Should_Generate_Properties_When_Instagram()
-        {
-            var model = await GetInstagramGeneratedModel();
-            Assert.AreEqual(35, model.Objects.Sum(c => c.Properties.Count));
-        }
-
         [Test]
         public async void Should_Generate_Properties_When_Large()
         {
             var model = await GetLargeGeneratedModel();
             Assert.AreEqual(24, model.Objects.Sum(c => c.Properties.Count));
-        }
-
-
-        [Test, Ignore]
-        public async void Should_Generate_Properties_When_Regression()
-        {
-            var model = await GetRegressionGeneratedModel();
-            Assert.AreEqual(130, model.Objects.Sum(c => c.Properties.Count));
-        }
-
-
-        [Test, Ignore]
-        public async void Should_Generate_Properties_When_Test()
-        {
-            var model = await GetTestGeneratedModel();
-            Assert.AreEqual(36, model.Objects.Sum(c => c.Properties.Count));
-        }
-
-
-        [Test, Ignore]
-        public async void Should_Generate_Properties_When_Twitter()
-        {
-            var model = await GetTwitterGeneratedModel();
-            Assert.AreEqual(348, model.Objects.Sum(c => c.Properties.Count));
-        }
-
-
-        [Test, Ignore]
-        public async Task Should_Generate_Valid_XML_Comments_WhenGithub()
-        {
-            var model = await GetGitHubGeneratedModel();
-            var xmlDoc = new XmlDocument();
-            foreach (var method in model.Controllers.SelectMany(c => c.Methods))
-            {
-                var xmlComment = GetXml(method.XmlComment);
-                Assert.DoesNotThrow(() => xmlDoc.LoadXml(xmlComment));
-            }
-        }
-
-
-        [Test, Ignore]
-        public async Task Should_Generate_Valid_XML_Comments_WhenTwitter()
-        {
-            var model = await GetTwitterGeneratedModel();
-            var xmlDoc = new XmlDocument();
-            foreach (var method in model.Controllers.SelectMany(c => c.Methods))
-            {
-                var xmlComment = GetXml(method.XmlComment);
-                Assert.DoesNotThrow(() => xmlDoc.LoadXml(xmlComment));
-            }
         }
 
         [Test]
@@ -224,17 +119,6 @@ namespace Raml.Tools.Tests
                 Assert.DoesNotThrow(() => xmlDoc.LoadXml(xmlComment));
             }
         }
-
-
-        [Test, Ignore]
-        public async Task Should_Link_Response_And_Request_With_Types_When_Orders_XML()
-        {
-            var model = await GetOrdersXmlGeneratedModel();
-            Assert.AreEqual("PurchaseOrderType", model.Controllers.First().Methods.First(m => m.Verb == "Get").ReturnType);
-            Assert.AreEqual("PurchaseOrderType", model.Controllers.First().Methods.First(m => m.Verb == "Post").Parameter.Type);
-        }
-
-
 
         [Test]
         public async Task ShouldGenerateProperties_Issue17()

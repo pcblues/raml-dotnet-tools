@@ -103,8 +103,8 @@ namespace AMF.Tools.Core.ClientGenerator
             var generatedMethod = new ClientGeneratorMethod
             {
                 Name = NetNamingMapper.GetMethodName(operation.Method ?? "Get" + resource.Path),
-                ReturnType = GetReturnType(GeneratorServiceHelper.GetKeyForResource(operation, resource, parentUrl), operation, resource, url),
-                Parameter = GetParameter(GeneratorServiceHelper.GetKeyForResource(operation, resource, parentUrl), operation, resource, url),
+                ReturnType = GetReturnType(GeneratorServiceHelper.GetKeyForResource(operation, resource), operation, resource, url),
+                Parameter = GetParameter(GeneratorServiceHelper.GetKeyForResource(operation, resource), operation, resource, url),
                 Comment = GetComment(resource, operation, url),
                 Url = url,
                 Verb = NetNamingMapper.Capitalize(operation.Method),

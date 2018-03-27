@@ -29,7 +29,7 @@ namespace VSIXProject1
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             var parser = new AmfParser();
-            var model = await parser.Load("/desarrollo/mulesoft/raml-dotnet-parser-2/source/UnitTestProject1/specs/chinook-v1.raml");
+            var model = await parser.Load("/desarrollo/mulesoft/raml-dotnet-tools/AMF.Tools.Tests/files/raml1/chinook-v1.raml");
             txtBox1.Text = model.WebApi.Name;
             
         }

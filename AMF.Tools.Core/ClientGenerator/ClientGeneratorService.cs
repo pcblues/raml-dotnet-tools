@@ -41,12 +41,12 @@ namespace AMF.Tools.Core.ClientGenerator
             uriParameterObjects = new Dictionary<string, ApiObject>();
             enums = new Dictionary<string, ApiEnum>();
 
-            var ns = NetNamingMapper.GetNamespace(raml.WebApi.Name);
-            new RamlTypeParser(raml.Shapes, schemaObjects, ns, enums, warnings).Parse();
+            var ns = string.IsNullOrWhiteSpace(raml.WebApi?.Name) ? targetNamespace : NetNamingMapper.GetNamespace(raml.WebApi.Name);
+            //new RamlTypeParser(raml.Shapes, schemaObjects, ns, enums, warnings).Parse();
 
             ParseSchemas();
-            schemaRequestObjects = GetRequestObjects();
-            schemaResponseObjects = GetResponseObjects();
+            //schemaRequestObjects = GetRequestObjects();
+            //schemaResponseObjects = GetResponseObjects();
 
             CleanProperties(schemaObjects);
             CleanProperties(schemaRequestObjects);
@@ -115,7 +115,7 @@ namespace AMF.Tools.Core.ClientGenerator
                 if (resource == null)
                     continue;
 
-                var fullUrl = GetUrl(url, resource.Path);
+                var fullUrl = resource.Path;
                 // when the resource is a parameter dont generate a class but add it's methods and children to the parent
                 if (resource.Path.StartsWith("/{") && resource.Path.EndsWith("}"))
                 {
@@ -166,7 +166,7 @@ namespace AMF.Tools.Core.ClientGenerator
             var propertiesNames = new List<string>();
             foreach (var parentResource in raml.WebApi.EndPoints)
             {
-                var fullUrl = GetUrl(null, parentResource.Path);
+                var fullUrl = parentResource.Path;
 
                 if (!parentResource.Path.StartsWith("/{") || !parentResource.Path.EndsWith("}"))
                 {
@@ -206,7 +206,7 @@ namespace AMF.Tools.Core.ClientGenerator
                 if (resource == null)
                     continue;
 
-                var fullUrl = GetUrl(url, resource.Path);
+                var fullUrl = resource.Path;
                 if (!resource.Path.StartsWith("/{") || !resource.Path.EndsWith("}"))
                 {
                     var classObj = GetClassObject(fullUrl);

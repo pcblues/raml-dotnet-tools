@@ -38,7 +38,7 @@ namespace AMF.Tools.Core
 
 				properties.Add(new Property
 				               {
-					               Type = ObjectParser.MapShapeType(parameter.Schema),
+					               Type = NetTypeMapper.GetNetType(parameter.Schema),
 					               Name = NetNamingMapper.GetPropertyName(parameter.Name),
                                    OriginalName = parameter.Name,
 					               Description = description,

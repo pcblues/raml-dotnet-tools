@@ -61,7 +61,7 @@ namespace VSIXProject1
         {
             base.Initialize();
 
-            Command1.Initialize(this);
+            AddContractCommand.Initialize(this);
         }
 
         #endregion

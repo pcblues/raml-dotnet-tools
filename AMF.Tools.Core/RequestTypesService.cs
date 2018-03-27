@@ -24,12 +24,15 @@ namespace AMF.Tools.Core
 
         public GeneratorParameter GetRequestParameter(string key, Operation method, EndPoint resource, string fullUrl, IEnumerable<string> defaultMediaTypes)
         {
+            if(method.Request == null || !method.Request.Payloads.Any())
+                return new GeneratorParameter { Name = "content", Type = "string" }; //TODO: check
+
             var mimeType = GetMimeType(method.Request.Payloads, defaultMediaTypes);
             return new GeneratorParameter //TODO: check
             {
                 Name = mimeType.Name,
                 Description = mimeType.Description,
-                Type = ObjectParser.MapShapeType(mimeType)
+                Type = NetTypeMapper.GetNetType(mimeType, schemaObjects)
             };
 
             //if (mimeType != null)

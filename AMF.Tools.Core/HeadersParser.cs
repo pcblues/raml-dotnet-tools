@@ -48,7 +48,7 @@ namespace AMF.Tools.Core
                 var description = ParserHelpers.RemoveNewLines(header.Description);
 
                 var shape = (ScalarShape)header.Schema;
-                var type = NetTypeMapper.GetNetType(ObjectParser.MapShapeType(shape), shape.Format);
+                var type = NetTypeMapper.GetNetType(shape);
                 var typeSuffix = (type == "string" || header.Required ? "" : "?");
 
                 properties.Add(new Property
@@ -57,7 +57,7 @@ namespace AMF.Tools.Core
                                    Name = NetNamingMapper.GetPropertyName(header.Name),
                                    OriginalName = shape.DisplayName,
                                    Description = description,
-                                   Example = ObjectParser.MapShapeType(shape),
+                                   Example = ObjectParser.MapExample(shape),
                                    Required = header.Required
                                });
             }

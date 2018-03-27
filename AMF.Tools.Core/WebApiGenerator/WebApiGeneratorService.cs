@@ -10,7 +10,7 @@ namespace AMF.Tools.Core.WebApiGenerator
     public class WebApiGeneratorService : GeneratorServiceBase
 	{
 		private WebApiMethodsGenerator webApiMethodsGenerator;
-		public WebApiGeneratorService(AmfModel raml, string targetNamespace) : base(raml, targetNamespace)
+        public WebApiGeneratorService(AmfModel raml, string targetNamespace) : base(raml, targetNamespace)
 		{
 		}
 
@@ -20,24 +20,32 @@ namespace AMF.Tools.Core.WebApiGenerator
             warnings = new Dictionary<string, string>();
             enums = new Dictionary<string, ApiEnum>();
 
-            var ns = string.IsNullOrWhiteSpace(raml.WebApi.Name) ? targetNamespace : NetNamingMapper.GetNamespace(raml.WebApi.Name);
+            var ns = string.IsNullOrWhiteSpace(raml.WebApi?.Name) ? targetNamespace : NetNamingMapper.GetNamespace(raml.WebApi.Name);
 
-            new RamlTypeParser(raml.Shapes, schemaObjects, ns, enums, warnings).Parse();
+            //new RamlTypeParser(raml.Shapes, schemaObjects, ns, enums, warnings).Parse();
 
             ParseSchemas();
-            schemaRequestObjects = GetRequestObjects();
-            schemaResponseObjects = GetResponseObjects();
+            GetRequestObjects();
+            //CleanProperties(schemaObjects);
+            //CleanProperties(schemaRequestObjects);
+            //CleanProperties(schemaResponseObjects);
 
-            CleanProperties(schemaObjects);
-            CleanProperties(schemaRequestObjects);
-            CleanProperties(schemaResponseObjects);
+            if (raml.WebApi == null)
+            {
+                return new WebApiGeneratorModel
+                {
+                    Namespace = ns,
+                    SchemaObjects = schemaObjects,
+                    RequestObjects = schemaRequestObjects,
+                    ResponseObjects = schemaResponseObjects,
+                    Warnings = warnings,
+                    Enums = Enums
+                };
+            }
 
             webApiMethodsGenerator = new WebApiMethodsGenerator(raml, schemaResponseObjects, schemaRequestObjects, linkKeysWithObjectNames, schemaObjects);
-
             var controllers = GetControllers().ToArray();
-
-            CleanNotUsedObjects(controllers);
-
+            CleanNotUsedObjects(controllers); //TODO: check
             
             return new WebApiGeneratorModel
                    {
@@ -50,6 +58,26 @@ namespace AMF.Tools.Core.WebApiGenerator
                        Enums = Enums,
                        ApiVersion = raml.WebApi.Version
                    };
+        }
+
+        private void GetRequestObjects()
+        {
+            if (raml.WebApi == null)
+                return;
+
+            foreach(var endpoint in raml.WebApi.EndPoints)
+            {
+                foreach (var operation in endpoint.Operations.Where(o => o.Request != null && o.Request.Payloads.Any()))
+                {
+                    var payloads = operation.Request.Payloads.Where(p => p.MediaType.Contains("json"));
+                    foreach (var payload in payloads)
+                    {
+                        var newObjects = new ObjectParser().ParseObject(GeneratorServiceHelper.GetKeyForResource(operation, endpoint) , payload.Schema, 
+                            schemaObjects, warnings, enums, targetNamespace);
+                        AddNewObjects(newObjects);
+                    }
+                }
+            }
         }
 
         private void CleanNotUsedObjects(IEnumerable<ControllerObject> controllers)
@@ -79,7 +107,7 @@ namespace AMF.Tools.Core.WebApiGenerator
                 if (resource == null)
                     continue;
 
-                var fullUrl = GetUrl(string.Empty, resource.Path);
+                var fullUrl = resource.Path;
 
                 // when the resource is a parameter dont generate a class but add it's methods and children to the parent
                 if (resource.Path.StartsWith("/{") && resource.Path.EndsWith("}"))
@@ -90,9 +118,16 @@ namespace AMF.Tools.Core.WebApiGenerator
                 }
                 else
                 {
-                    var controller = CreateControllerAndAddMethods(classes, classesNames, classesObjectsRegistry, resource, fullUrl, parentUriParameters);
-
-                    //GetMethodsFromChildResources(resource.Resources, fullUrl, controller, resource.UriParameters);
+                    var isParentController = fullUrl.Count(u => u == '/') == 1;
+                    if (isParentController)
+                    {
+                        var controller = CreateControllerAndAddMethods(classes, classesNames, classesObjectsRegistry, resource, fullUrl, parentUriParameters);
+                    }
+                    else
+                    {
+                        var parentController = classes.First(c => resource.Path.StartsWith("/" + c.PrefixUri));
+                        GetMethodsFromChildResources(resource, fullUrl, parentController, parentUriParameters); //TODO: check parentUriParameters
+                    }
                 }
             }
         }
@@ -134,28 +169,22 @@ namespace AMF.Tools.Core.WebApiGenerator
         }
 
 
-        private void GetMethodsFromChildResources(IEnumerable<EndPoint> resources, string url, ControllerObject parentController, IDictionary<string, Parameter> parentUriParameters)
+        private void GetMethodsFromChildResources(EndPoint resource, string url, ControllerObject parentController, IDictionary<string, Parameter> parentUriParameters)
         {
-            if (resources == null)
+            if (resource == null)
                 return;
 
-            foreach (var resource in resources)
+            var fullUrl = resource.Path;
+
+            var methods = webApiMethodsGenerator.GetMethods(resource, fullUrl, parentController, parentController.Name, parentUriParameters);
+            foreach (var method in methods)
             {
-                if (resource == null)
-                    continue;
-
-                var fullUrl = GetUrl(url, resource.Path);
-
-                var methods = webApiMethodsGenerator.GetMethods(resource, fullUrl, parentController, parentController.Name, parentUriParameters);
-                foreach (var method in methods)
-                {
-                    parentController.Methods.Add(method);
-                }
-
-                GetInheritedUriParams(parentUriParameters, resource);
-
-                //GetMethodsFromChildResources(resource.Resources, fullUrl, parentController, parentUriParameters);
+                parentController.Methods.Add(method);
             }
+
+            GetInheritedUriParams(parentUriParameters, resource);
+
+            //GetMethodsFromChildResources(resource.Resources, fullUrl, parentController, parentUriParameters);
         }
     }
 }

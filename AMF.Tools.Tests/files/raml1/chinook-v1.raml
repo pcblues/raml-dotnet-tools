@@ -109,16 +109,6 @@ types:
           BillingPostalCode:
           Lines:
               type: InvoiceLine[]
-  ArtistByTrack:
-      type: object
-      properties:
-          []:
-              type: Artist
-  TracksByArtist:
-      type: object
-      properties:
-          []:
-              type: Track[]
 /customers:
   get:
     description: this is the customers get description
@@ -172,14 +162,6 @@ types:
         application/json:
           type: Track
     delete:
-  /byartist:
-    /{id}:
-      get:
-        responses:
-          200:
-            body:
-              application/json:
-                type: TracksByArtist
 /artists:
   get:
     responses:
@@ -206,14 +188,6 @@ types:
         application/json:
           type: Artist
     delete:
-  /bytrack:
-    /{id}:
-      get:
-        responses:
-          200:
-            body:
-              application/json:
-                type: ArtistByTrack
 /albums:
   get:
     responses:

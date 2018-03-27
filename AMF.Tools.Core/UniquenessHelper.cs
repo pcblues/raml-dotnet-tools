@@ -135,11 +135,34 @@ namespace AMF.Tools.Core
                    || schemaObjects.Any(o => o.Value.GeneratedCode == apiObject.GeneratedCode);
         }
 
-        private static ApiObject FindObject(IHasName apiObject, IDictionary<string, ApiObject> objects, string key)
+        //private static ApiObject FindObject(IHasName apiObject, IDictionary<string, ApiObject> objects, string key)
+        //{
+        //    var foundKey = objects.Keys.FirstOrDefault(k => string.Equals(k, key));
+        //    if (foundKey != null)
+        //        return objects[foundKey];
+
+        //    var byName = new Func<KeyValuePair<string, ApiObject>, bool>(o => o.Value.Name == apiObject.Name);
+        //    if (objects.Any(byName))
+        //        return objects.First(byName).Value;
+
+        //    return null;
+        //}
+
+        private static ApiObject FindObject(ApiObject apiObject, IDictionary<string, ApiObject> objects, string key)
         {
             var foundKey = objects.Keys.FirstOrDefault(k => string.Equals(k, key));
-            var obj = foundKey != null ? objects[foundKey] : objects.FirstOrDefault(o => o.Value.Name == apiObject.Name).Value;
-            return obj;
+            if (foundKey != null)
+                return objects[foundKey];
+
+            var byName = new Func<KeyValuePair<string, ApiObject>, bool>(o => o.Value.Name == apiObject.Name);
+            if (objects.Any(byName))
+                return objects.First(byName).Value;
+
+            var byType = new Func<KeyValuePair<string, ApiObject>, bool>(o => o.Value.Type == apiObject.Type);
+            if (objects.Any(byType))
+                return objects.First(byType).Value;
+
+            return null;
         }
 
     }

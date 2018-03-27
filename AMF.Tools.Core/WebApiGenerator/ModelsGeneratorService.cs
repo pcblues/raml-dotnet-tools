@@ -17,13 +17,13 @@ namespace AMF.Tools.Core.WebApiGenerator
             warnings = new Dictionary<string, string>();
             enums = new Dictionary<string, ApiEnum>();
 
-            var ns = string.IsNullOrWhiteSpace(raml.WebApi.Name) ? targetNamespace : NetNamingMapper.GetNamespace(raml.WebApi.Name);
+            var ns = string.IsNullOrWhiteSpace(raml.WebApi?.Name) ? targetNamespace : NetNamingMapper.GetNamespace(raml.WebApi.Name);
 
-            new RamlTypeParser(raml.Shapes, schemaObjects, ns, enums, warnings).Parse();
+            //new RamlTypeParser(raml.Shapes, schemaObjects, ns, enums, warnings).Parse();
 
             ParseSchemas();
-            schemaRequestObjects = GetRequestObjects();
-            schemaResponseObjects = GetResponseObjects();
+            //schemaRequestObjects = GetRequestObjects();
+            //schemaResponseObjects = GetResponseObjects();
 
             return new ModelsGeneratorModel
             {

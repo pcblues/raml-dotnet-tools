@@ -146,7 +146,7 @@ namespace AMF.Tools.Core
 
         private string GetNamedReturnType(Operation method, EndPoint resource, Payload mimeType, string fullUrl)
         {
-            return ObjectParser.MapShapeType(mimeType.Schema);
+            return NetTypeMapper.GetNetType(mimeType.Schema, schemaObjects);
 
             //if (mimeType.Schema != null && mimeType.Schema.Contains("<<") && mimeType.Schema.Contains(">>"))
             //    return GetReturnTypeFromParameter(method, resource, fullUrl, mimeType.Schema);

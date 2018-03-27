@@ -12,20 +12,6 @@ namespace Raml.Tools.Tests
     public class ClientGeneratorRaml1Tests
     {
 
-        [Test, Ignore]
-        public async Task ShouldBuild_WhenAnnotationTargets()
-        {
-            var model = await GetAnnotationTargetsModel();
-            Assert.IsNotNull(model);
-        }
-
-        [Test, Ignore]
-        public async Task ShouldBuild_WhenAnnotations()
-        {
-            var model = await GetAnnotationsModel();
-            Assert.IsNotNull(model);
-        }
-
         [Test]
         public async Task ShouldBuild_WhenCustomScalar()
         {
@@ -79,24 +65,6 @@ namespace Raml.Tools.Tests
 
             Assert.AreEqual(6, model.Objects.Count());
         }
-
-        [Test]
-        public async Task ShouldBuildMapTypes()
-        {
-            var model = await GetMapsModel();
-            Assert.AreEqual(6, model.Objects.Count());
-            Assert.IsTrue(model.Objects.Any(o => o.Name == "MapOfObjectItem"));
-            Assert.IsTrue(model.Objects.Any(o => o.Name == "MapOfPerson"));
-            Assert.AreEqual("MapOfPerson", model.Objects.First(o => o.Name == "MapOfPerson").Type);
-            Assert.IsTrue(model.Objects.Any(o => o.Name == "MapOfInt"));
-            Assert.AreEqual("MapOfInt", model.Objects.First(o => o.Name == "MapOfInt").Type);
-            Assert.IsTrue(model.Objects.Any(o => o.Name == "MapOfObject"));
-            Assert.AreEqual("MapOfObject", model.Objects.First(o => o.Name == "MapOfObject").Type);
-
-            Assert.AreEqual("MapOfPersonArray", model.Objects.First(c => c.Name == "MapOfPersonArray").Type);
-            Assert.AreEqual("MapOfPersonArray", model.Classes.First(c => c.Name == "Map").Methods.First().ReturnType);
-        }
-
 
         [Test]
         public async Task ShouldBuild_WhenParameters()

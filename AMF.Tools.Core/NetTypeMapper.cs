@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml;
 using Newtonsoft.Json.Schema;
 using AMF.Parser.Model;
+using Raml.Common;
 
 namespace AMF.Tools.Core
 {
@@ -130,12 +131,52 @@ namespace AMF.Tools.Core
             {"rfc2616", "DateTimeOffset"}
         };
 
-        public static string GetNetType(Shape shape) //TODO: check
+        //TODO: check
+        public static string GetNetType(Shape shape, IDictionary<string, ApiObject> existingObjects = null, 
+            IDictionary<string, ApiObject> newObjects = null)
         {
-            if (shape is ScalarShape scalar)
-                return TypeStringConversion[scalar.DataType.Substring(scalar.DataType.LastIndexOf('#') + 1)];
+            if (!string.IsNullOrWhiteSpace(shape.LinkTargetName))
+                return NetNamingMapper.GetObjectName(shape.LinkTargetName);
 
-            return shape.Name;
+            if (shape is ScalarShape scalar)
+                return GetNetType(scalar.DataType.Substring(scalar.DataType.LastIndexOf('#') + 1), scalar.Format);
+
+            if (shape is ArrayShape array)
+                return CollectionTypeHelper.GetCollectionType(GetNetType(array.Items, existingObjects, newObjects));
+
+            if (shape is FileShape file)
+                return TypeStringConversion["file"];
+
+            if(shape.Inherits.Count() == 1)
+            {
+                if (shape is NodeShape nodeShape)
+                {
+                    if(nodeShape.Properties.Count() == 0)
+                        return GetNetType(nodeShape.Inherits.First(), existingObjects, newObjects);
+                }
+                if (shape.Inherits.First() is ArrayShape arrayShape)
+                    return CollectionTypeHelper.GetCollectionType(GetNetType(arrayShape.Items, existingObjects, newObjects));
+
+                if(shape is AnyShape any)
+                {
+                    var key = NetNamingMapper.GetObjectName(any.Inherits.First().Name);
+                    if (existingObjects != null && existingObjects.ContainsKey(key))
+                        return key;
+                    if (newObjects != null && newObjects.ContainsKey(key))
+                        return key;
+                }
+            }
+            if(shape.Inherits.Count() > 0)
+            {
+                //TODO: check
+            }
+
+            if(shape.GetType() == typeof(AnyShape))
+            {
+                return NetTypeMapper.GetNetType("any", null);
+            }
+
+            return NetNamingMapper.GetObjectName(shape.Name);
         }
 
         public static string GetNetType(string type, string format)

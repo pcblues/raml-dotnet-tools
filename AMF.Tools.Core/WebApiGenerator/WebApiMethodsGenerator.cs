@@ -4,6 +4,7 @@ using System.Linq;
 using Raml.Common;
 using AMF.Parser.Model;
 using AMF.Tools.Core.WebApiGenerator;
+using System;
 
 namespace AMF.Tools.Core
 {
@@ -19,26 +20,26 @@ namespace AMF.Tools.Core
             queryParametersParser = new QueryParametersParser(schemaObjects);
         }
 
-        public IEnumerable<ControllerMethod> GetMethods(EndPoint resource, string url, ControllerObject parent, string objectName, IDictionary<string, Parameter> parentUriParameters)
+        public IEnumerable<ControllerMethod> GetMethods(EndPoint endpoint, string url, ControllerObject parent, string objectName, IDictionary<string, Parameter> parentUriParameters)
         {
             var methodsNames = new List<string>();
             if (parent != null && parent.Methods != null)
                 methodsNames = parent.Methods.Select(m => m.Name).ToList();
 
             var generatorMethods = new Collection<ControllerMethod>();
-            if (resource.Operations == null)
+            if (endpoint.Operations == null)
                 return generatorMethods;
 
-            foreach (var method in resource.Operations)
+            foreach (var method in endpoint.Operations)
             {
-                var generatedMethod = BuildControllerMethod(url, method, resource, parent, parentUriParameters);
+                var generatedMethod = BuildControllerMethod(url, method, endpoint, parent, parentUriParameters);
 
                 if (IsVerbForMethod(method))
                 {
                     if (methodsNames.Contains(generatedMethod.Name))
-                        generatedMethod.Name = GetUniqueName(methodsNames, generatedMethod.Name, resource.Path);
+                        generatedMethod.Name = GetUniqueName(methodsNames, generatedMethod.Name, GetRelativePath(endpoint.Path, parent.PrefixUri));
 
-                    if (method.Request.QueryParameters != null && method.Request.QueryParameters.Any())
+                    if (method.Request != null && method.Request.QueryParameters != null && method.Request.QueryParameters.Any())
                     {
                         var queryParameters = queryParametersParser.ParseParameters(method);
                         generatedMethod.QueryParameters = queryParameters;
@@ -52,21 +53,27 @@ namespace AMF.Tools.Core
             return generatorMethods;
         }
 
+        private string GetRelativePath(string path, string prefixUri)
+        {
+            return path.Replace(prefixUri, string.Empty);
+        }
+
         private ControllerMethod BuildControllerMethod(string url, Operation method, EndPoint resource, ControllerObject parent, IDictionary<string, Parameter> parentUriParameters)
         {
             var relativeUri = UrlGeneratorHelper.GetRelativeUri(url, parent.PrefixUri);
 
             var parentUrl = UrlGeneratorHelper.GetParentUri(url, resource.Path);
 
-            var securedBy = resource.Operations.FirstOrDefault(m => m.Method == method.Method && m.Security != null
-                                && m.Security.Any()).Security.Select(s => s.Name); //TODO: check
+            var operationWithSecurity = resource.Operations.FirstOrDefault(m => m.Method == method.Method && m.Security != null
+                                && m.Security.Any());
+            var securedBy = operationWithSecurity?.Security.Select(s => s.Name).ToArray(); //TODO: check
 
             return new ControllerMethod
             {
                 Name = NetNamingMapper.GetMethodName(method.Method ?? "Get" + resource.Path),
-                Parameter = GetParameter(GeneratorServiceHelper.GetKeyForResource(method, resource, parentUrl), method, resource, url),
+                Parameter = GetParameter(GeneratorServiceHelper.GetKeyForResource(method, resource), method, resource, url),
                 UriParameters = uriParametersGenerator.GetUriParameters(resource, url, parentUriParameters),
-                ReturnType = GetReturnType(GeneratorServiceHelper.GetKeyForResource(method, resource, parentUrl), method, resource, url),
+                ReturnType = GetReturnType(GeneratorServiceHelper.GetKeyForResource(method, resource), method, resource, url),
                 Comment = GetComment(resource, method, url),
                 Url = relativeUri,
                 Verb = NetNamingMapper.Capitalize(method.Method),

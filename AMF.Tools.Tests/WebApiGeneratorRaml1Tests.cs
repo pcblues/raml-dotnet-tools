@@ -12,20 +12,6 @@ namespace Raml.Tools.Tests
     public class WebApiGeneratorRaml1Tests
     {
 
-        [Test, Ignore]
-        public async Task ShouldBuild_WhenAnnotationTargets()
-        {
-            var model = await GetAnnotationTargetsModel();
-            Assert.IsNotNull(model);
-        }
-
-        [Test, Ignore]
-        public async Task ShouldBuild_WhenAnnotations()
-        {
-            var model = await GetAnnotationsModel();
-            Assert.IsNotNull(model);
-        }
-
         [Test]
         public async Task ShouldBuildArrays()
         {
@@ -99,14 +85,6 @@ namespace Raml.Tools.Tests
             var model = await BuildModel("files/raml1/typesordering.raml");
             Assert.AreEqual(CollectionTypeHelper.GetCollectionType("InvoiceLine"), model.Objects.First(c => c.Name == "Invoice").Properties.First(p => p.Name == "Lines").Type);
 
-            Assert.AreEqual("ArtistByTrack", model.Objects.First(c => c.Name == "ArtistByTrack").Type);
-            Assert.AreEqual("Dictionary<string,Artist>", model.Objects.First(c => c.Name == "ArtistByTrack").BaseClass);
-            Assert.AreEqual("TracksByArtist", model.Objects.First(c => c.Name == "TracksByArtist").Type);
-            Assert.AreEqual("Dictionary<string,IList<Track>>", model.Objects.First(c => c.Name == "TracksByArtist").BaseClass);
-
-            Assert.AreEqual("ArtistByTrack", model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Url == "bytrack/{id}").ReturnType);
-            Assert.AreEqual("TracksByArtist", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Url == "byartist/{id}").ReturnType);
-
             Assert.AreEqual("Artist", model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Name == "GetById").ReturnType);
             Assert.AreEqual("Album", model.Controllers.First(c => c.Name == "Albums").Methods.First(m => m.Name == "GetById").ReturnType);
             Assert.AreEqual("Track", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Name == "GetById").ReturnType);
@@ -131,14 +109,6 @@ namespace Raml.Tools.Tests
             var model = await BuildModel("files/raml1/chinook-v1.raml");
             Assert.AreEqual(CollectionTypeHelper.GetCollectionType("InvoiceLine"), model.Objects.First(c => c.Name == "Invoice").Properties.First(p => p.Name == "Lines").Type);
 
-            Assert.AreEqual("ArtistByTrack", model.Objects.First(c => c.Name == "ArtistByTrack").Type);
-            Assert.AreEqual("Dictionary<string,Artist>", model.Objects.First(c => c.Name == "ArtistByTrack").BaseClass);
-            Assert.AreEqual("TracksByArtist", model.Objects.First(c => c.Name == "TracksByArtist").Type);
-            Assert.AreEqual("Dictionary<string,IList<Track>>", model.Objects.First(c => c.Name == "TracksByArtist").BaseClass);
-
-            Assert.AreEqual("ArtistByTrack", model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Url == "bytrack/{id}").ReturnType);
-            Assert.AreEqual("TracksByArtist", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Url == "byartist/{id}").ReturnType);
-
             Assert.AreEqual("Artist", model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Name == "GetById").ReturnType);
             Assert.AreEqual("Album", model.Controllers.First(c => c.Name == "Albums").Methods.First(m => m.Name == "GetById").ReturnType);
             Assert.AreEqual("Track", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Name == "GetById").ReturnType);
@@ -153,7 +123,6 @@ namespace Raml.Tools.Tests
             Assert.AreEqual("Album", model.Controllers.First(c => c.Name == "Albums").Methods.First(m => m.Name == "Post").Parameter.Type);
             Assert.AreEqual("Customer", model.Controllers.First(c => c.Name == "Customers").Methods.First(m => m.Name == "Post").Parameter.Type);
             Assert.AreEqual("Track", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Name == "Post").Parameter.Type);
-
         }
 
         [Test]
@@ -203,9 +172,9 @@ namespace Raml.Tools.Tests
         public async Task ShouldDiffientiateBetweenTypesAndBaseTypes()
         {
             var model = await BuildModel("files/raml1/underscore.raml");
-            Assert.AreEqual(3, model.Objects.Count());
             Assert.AreEqual("Links", model.Objects.First(o => o.Name == "Example").Properties.First(c => c.Name == "Links").Type);
             Assert.AreEqual("Link", model.Objects.First(o => o.Name == "Links").Properties.First(c => c.Name == "Self").Type);
+            Assert.AreEqual(3, model.Objects.Count());
         }
 
         [Test]
@@ -434,8 +403,8 @@ namespace Raml.Tools.Tests
 
         private static async Task<WebApiGeneratorModel> BuildModel(string ramlFile)
         {
-            var fi = new FileInfo(ramlFile);
-            var raml = await new AmfParser().Load(fi.FullName);
+            //var fi = new FileInfo(ramlFile);
+            var raml = await new AmfParser().Load(ramlFile);
             var model = new WebApiGeneratorService(raml, "TargetNamespace").BuildModel();
 
             return model;

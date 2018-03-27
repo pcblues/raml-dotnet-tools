@@ -15,9 +15,9 @@ namespace AMF.Tools.Core
             return payload ?? response.Payloads.First(); //TODO: check
         }
 
-        public static string GetKeyForResource(Operation operation, EndPoint resource, string parentUrl)
+        public static string GetKeyForResource(Operation operation, EndPoint resource)
         {
-            return parentUrl + resource.Path + "-" + (string.IsNullOrWhiteSpace(operation.Method) ? "Get" : operation.Method);
+            return resource.Path + "-" + (string.IsNullOrWhiteSpace(operation.Method) ? "Get" : operation.Method);
         }
 
     }
