@@ -387,6 +387,20 @@ namespace Raml.Tools
 
                     props.Add(new Property { Name = name, Type = type, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
                 }
+                if (!string.IsNullOrWhiteSpace(prop.Type))
+                {
+                    var newProp = new Property
+                    {
+                        Type = NetNamingMapper.GetObjectName(kv.Key),
+                        Name = NetNamingMapper.GetPropertyName(kv.Key),
+                        Required = prop.Required,
+                        Example = prop.Example,
+                        Description = prop.Description,
+                        OriginalName = kv.Key.TrimEnd('?')
+                    };
+                    props.Add(newProp);
+                    continue;
+                }
             }
             return props;
         }

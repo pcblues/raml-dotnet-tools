@@ -98,6 +98,12 @@ namespace Raml.Tools.Tests
             var model = await BuildModel("files/raml1/typesordering.raml");
             Assert.AreEqual(CollectionTypeHelper.GetCollectionType("InvoiceLine"), model.Objects.First(c => c.Name == "Invoice").Properties.First(p => p.Name == "Lines").Type);
 
+            Assert.AreEqual("Artist", model.Objects.First(c => c.Name == "Artist").Type);
+            Assert.AreEqual(2, model.Objects.First(c => c.Name == "Artist").Properties.Count());
+
+            Assert.AreEqual(3, model.Objects.First(c => c.Name == "Album").Properties.Count());
+            Assert.AreEqual("Artist", model.Objects.First(c => c.Name == "Album").Properties.First(m => m.Name == "Artist").Type);
+
             Assert.AreEqual("ArtistByTrack", model.Objects.First(c => c.Name == "ArtistByTrack").Type);
             Assert.AreEqual("Dictionary<string,Artist>", model.Objects.First(c => c.Name == "ArtistByTrack").BaseClass);
             Assert.AreEqual("TracksByArtist", model.Objects.First(c => c.Name == "TracksByArtist").Type);
