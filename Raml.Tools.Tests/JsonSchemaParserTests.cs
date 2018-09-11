@@ -523,7 +523,7 @@ namespace Raml.Tools.Tests
 
             Assert.AreEqual(3, obj.Properties.Count);
             Assert.AreEqual("Title", obj.Properties.First(p => p.Name == "Title").Type);
-            Assert.AreEqual("object", obj.Properties.First(p => p.Name == "Name").Type);
+            Assert.AreEqual("object", obj.Properties.First(p => p.Name == "Ipname").Type);
         }
 
         [Test]
@@ -693,7 +693,7 @@ namespace Raml.Tools.Tests
 
             Assert.AreEqual(3, obj.Properties.Count);
             Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Id").Required);
-            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Name").Required);
+            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Ipname").Required);
             Assert.AreEqual(false, obj.Properties.First(c => c.Name == "Observations").Required);
         }
 
@@ -734,7 +734,7 @@ namespace Raml.Tools.Tests
             Assert.AreEqual(true, obj.IsArray);
             Assert.AreEqual(3, obj.Properties.Count);
             Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Id").Required);
-            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Name").Required);
+            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Ipname").Required);
             Assert.AreEqual(false, obj.Properties.First(c => c.Name == "Observations").Required);
         }
 
@@ -777,10 +777,10 @@ namespace Raml.Tools.Tests
 
             Assert.AreEqual(18, obj.Properties.First(c => c.Name == "Age").Minimum);
             Assert.AreEqual(100, obj.Properties.First(c => c.Name == "Weight").Maximum);
-            Assert.AreEqual(4, obj.Properties.First(c => c.Name == "Name").MinLength);
+            Assert.AreEqual(4, obj.Properties.First(c => c.Name == "Ipname").MinLength);
             Assert.AreEqual(255, obj.Properties.First(c => c.Name == "Observations").MaxLength);
             Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Age").Required);
-            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Name").Required);
+            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Ipname").Required);
         }
 
         [Test]
@@ -864,10 +864,10 @@ namespace Raml.Tools.Tests
 
             Assert.AreEqual(18, obj.Properties.First(c => c.Name == "Age").Minimum);
             Assert.AreEqual(100, obj.Properties.First(c => c.Name == "Weight").Maximum);
-            Assert.AreEqual(4, obj.Properties.First(c => c.Name == "Name").MinLength);
+            Assert.AreEqual(4, obj.Properties.First(c => c.Name == "Ipname").MinLength);
             Assert.AreEqual(255, obj.Properties.First(c => c.Name == "Observations").MaxLength);
             Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Age").Required);
-            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Name").Required);
+            Assert.AreEqual(true, obj.Properties.First(c => c.Name == "Ipname").Required);
         }
 
         [Test]
