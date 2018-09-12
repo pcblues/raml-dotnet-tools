@@ -147,6 +147,12 @@
     <None Include="files\raml1\array-type-expression.raml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="files\raml1\enums-root2.raml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="files\raml1\enums-root.raml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="files\raml1\lib-traits.raml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -465,6 +465,10 @@ namespace Raml.Tools
                 return obj.Type;
             }
 
+            if(enums.ContainsKey(prop.Type))
+                return prop.Type;
+
+
             return "object";
         }
 

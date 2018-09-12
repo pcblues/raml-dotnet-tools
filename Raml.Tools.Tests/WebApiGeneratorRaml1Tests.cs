@@ -400,6 +400,13 @@ namespace Raml.Tools.Tests
             Assert.AreEqual("object", model.Objects.First(o => o.Name != "Foo").Properties.First(p => p.Name == "Baz").Type);
         }
 
+        [Test]
+        public async Task ShouldBuild_EnumsAtRoot()
+        {
+            var model = await BuildModel("files/raml1/enums-root.raml");
+            Assert.AreEqual(2, model.Enums.Count());
+        }
+
         private static async Task<WebApiGeneratorModel> GetAnnotationTargetsModel()
         {
             return await BuildModel("files/raml1/annotations-targets.raml");
