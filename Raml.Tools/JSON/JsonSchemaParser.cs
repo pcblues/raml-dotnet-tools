@@ -394,7 +394,7 @@ namespace Raml.Tools.JSON
         {
             if (propertySchema.Type.HasValue
                 && (propertySchema.Type == Newtonsoft.JsonV4.Schema.JsonSchemaType.Object || propertySchema.Type.Value.ToString().Contains("Object")) 
-                && (propertySchema.OneOf == null || propertySchema.OneOf.Count == 0 || schema.Definitions == null || schema.Definitions.Count == 0))
+                && (propertySchema.OneOf == null || propertySchema.OneOf.Count == 0 || (schema != null && (schema.Definitions == null || schema.Definitions.Count == 0))))
             {
                 if (!string.IsNullOrWhiteSpace(schema?.Id) && ids.Contains(schema.Id))
                     return;
