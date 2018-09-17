@@ -1,0 +1,96 @@
+  track:
+    properties:
+        Id: 
+          type: integer
+        Name:
+        album:
+          type: album
+        MediaType:
+          properties:
+            Id: 
+                type: integer
+            Name:
+        Genre:
+          properties:
+            Id:
+                type: integer
+            Name:
+        Composer:
+        Milliseconds: 
+          type: integer
+        Bytes:
+          type: integer
+        UnitPrice: 
+          type: number     
+  invoice:
+    properties:
+      customer:
+          type: customer
+      InvoiceDate:
+      BillingAddress:
+      BillingCity:
+      BillingState:
+      BillingCountry:
+      BillingPostalCode:
+      Lines:
+          type: invoiceLine[]
+  album:
+    properties:
+        artist:
+          type: artist
+        Id: 
+            type: integer
+        Title:
+  employee:
+    type: person
+    properties:
+        HireDate?:
+  SupportRepresentant:
+    type: employee
+    properties:
+        ReportsTo:
+            type: employee
+  customer:
+    type: person
+    properties:
+      Company:
+  artist:
+    properties:
+      Id: 
+        type: integer
+      Name:
+  person:
+    properties:
+        Id: 
+            type: integer
+        Title?:
+        BirthDate?:
+        FirstName:
+        LastName:
+        Address?:
+        City?:
+        State?:
+        Country?:
+        PostalCode?:
+            type: string
+            minLength: 4
+            maxLength: 14
+        Phone?:
+            type: string
+            minLength: 8
+        Fax?:
+        Email?:
+        Picture?:
+            type: file
+  invoiceLine:
+    properties: 
+        Id: 
+            type: integer
+        track:
+            type: track
+        UnitPrice: 
+            type: number
+            minimum: 0
+        Quantity: 
+            type: integer
+            minimum: 1
