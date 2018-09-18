@@ -165,7 +165,9 @@
     <None Include="files\raml1\types-order-includes.raml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="files\raml1\typesordering.raml" />
+    <None Include="files\raml1\typesordering.raml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="files\service-test.raml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
