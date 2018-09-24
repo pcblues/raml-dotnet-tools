@@ -345,7 +345,14 @@ namespace Raml.Tools
                     if (!schemaObjects.ContainsKey(name) && !schemaObjects.ContainsKey(prop.Type))
                     {
                         var newApiObject = GetApiObjectFromObject(prop, name);
-                        schemaObjects.Add(name, newApiObject);
+                        var emptyDic = new Dictionary<string, ApiObject>();
+                        if (schemaObjects.ContainsKey(name) && !UniquenessHelper.HasSameProperties(newApiObject, schemaObjects, name, emptyDic, emptyDic))
+                        {
+                            name = UniquenessHelper.GetUniqueName(schemaObjects, name, emptyDic, emptyDic);
+                            newApiObject.Name = name;
+                        }
+                        if(!schemaObjects.ContainsKey(name))
+                            schemaObjects.Add(name, newApiObject);
                         props.Add(new Property(className) { Name = name, Type = name, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
                     }
                     else
