@@ -47,8 +47,17 @@ namespace Raml.Tools
             {
                 var description = ParserHelpers.RemoveNewLines(header.Value.Description);
 
-                var type = NetTypeMapper.GetNetType(header.Value.Type, header.Value.Format);
-                var typeSuffix = (type == "string" || header.Value.Required ? "" : "?");
+                var type = "string";
+                var typeSuffix = "";
+                if (header.Value.Type != null && header.Value.Type.Contains("|"))
+                {
+                    type = "object";
+                }
+                else
+                {
+                    type = NetTypeMapper.GetNetType(header.Value.Type, header.Value.Format);
+                    typeSuffix = (type == "string" || header.Value.Required ? "" : "?");
+                }
 
                 properties.Add(new Property
                                {

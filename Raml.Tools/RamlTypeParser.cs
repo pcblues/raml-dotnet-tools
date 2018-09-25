@@ -16,6 +16,7 @@ namespace Raml.Tools
 
         private readonly IDictionary<string, string> warnings;
         private readonly IDictionary<string, ApiEnum> enums;
+        private readonly IDictionary<string, ApiObject> emptyDic = new Dictionary<string, ApiObject>();
 
         public RamlTypeParser(RamlTypesOrderedDictionary ramlTypes, IDictionary<string, ApiObject> schemaObjects, 
             string targetNamespace, IDictionary<string, ApiEnum> enums, IDictionary<string, string> warnings)
@@ -123,7 +124,14 @@ namespace Raml.Tools
                 baseType = NetNamingMapper.GetObjectName(baseType);
 
                 var itemType = ParseNestedType(ramlType.Array.Items, baseType);
-                schemaObjects.Add(baseType, itemType);
+                if (schemaObjects.ContainsKey(baseType) && !UniquenessHelper.HasSameProperties(itemType, schemaObjects, baseType, emptyDic, emptyDic))
+                {
+                    baseType = UniquenessHelper.GetUniqueName(schemaObjects, baseType, emptyDic, emptyDic);
+                    itemType.Name = baseType;
+                }
+                if (!schemaObjects.ContainsKey(baseType))
+                    schemaObjects.Add(baseType, itemType);
+
                 typeOfArray = CollectionTypeHelper.GetCollectionType(baseType);
             }
 
@@ -345,7 +353,6 @@ namespace Raml.Tools
                     if (!schemaObjects.ContainsKey(name) && !schemaObjects.ContainsKey(prop.Type))
                     {
                         var newApiObject = GetApiObjectFromObject(prop, name);
-                        var emptyDic = new Dictionary<string, ApiObject>();
                         if (schemaObjects.ContainsKey(name) && !UniquenessHelper.HasSameProperties(newApiObject, schemaObjects, name, emptyDic, emptyDic))
                         {
                             name = UniquenessHelper.GetUniqueName(schemaObjects, name, emptyDic, emptyDic);
@@ -374,7 +381,7 @@ namespace Raml.Tools
                     var type = kv.Value.Type;
                     if (kv.Value.Array.Items != null)
                     {
-                        if (NetTypeMapper.IsPrimitiveType(kv.Value.Array.Items.Type))
+                        if (kv.Value.Array.Items.Object == null && NetTypeMapper.IsPrimitiveType(kv.Value.Array.Items.Type))
                         {
                             type = CollectionTypeHelper.GetCollectionType(NetTypeMapper.Map(kv.Value.Array.Items.Type));
                         }
