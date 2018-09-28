@@ -1,0 +1,133 @@
+#%RAML 1.0
+title: Chinook RAML 1 Api
+types: !include chinook-types.raml
+/customers:
+  get:
+    responses:
+      200:   
+        body:
+          application/json:
+            type: customer[]
+  post:
+    body:
+      application/json:
+        type: customer
+  /{id}:
+    uriParameters:
+      id:
+        required: true
+    get:
+        responses:
+          200:   
+              body:
+                application/json:
+                  type: customer
+    put:
+      body:
+        application/json:
+          type: customer
+    delete:
+/tracks:
+  get:
+    responses:
+      200:   
+          body:
+            application/json:
+              type: track[]
+  post:
+    body:
+      application/json:
+        type: track
+  /{id}:
+    uriParameters:
+      id:
+        required: true
+    get:
+        responses:
+          200:   
+              body:
+                application/json:
+                  type: track
+    put:
+      body:
+        application/json:
+          type: track
+    delete:
+/artists:
+  get:
+    responses:
+        200:   
+          body:
+            application/json:
+              type: artist[]
+  post:
+    body:
+      application/json:
+        type: artist
+  /{id}:
+    uriParameters:
+      id:
+        required: true
+    get:
+        responses:
+            200:   
+              body:
+                application/json:
+                  type: artist
+    put:
+      body:
+        application/json:
+          type: artist
+    delete:
+/albums:
+  get:
+    responses:
+      200:   
+        body:
+          application/json:
+            type: album[]
+  post:
+    body:
+      application/json:
+        type: album
+  /{id}:
+    uriParameters:
+      id:
+        required: true
+    get:
+        responses:
+          200:   
+            body:
+              application/json:
+                type: album
+    put:
+      body:
+        application/json:
+          type: album
+    delete:
+/invoices:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: invoice[]
+  post:
+    body:
+      application/json:
+        type: invoice
+  /{id}:
+    uriParameters:
+      id:
+        required: true
+    get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: invoice
+    put:
+      body:
+        application/json:
+          type: invoice
+    delete:

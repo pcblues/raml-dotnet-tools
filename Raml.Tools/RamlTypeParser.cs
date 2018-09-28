@@ -16,6 +16,7 @@ namespace Raml.Tools
 
         private readonly IDictionary<string, string> warnings;
         private readonly IDictionary<string, ApiEnum> enums;
+        private readonly IDictionary<string, ApiObject> emptyDic = new Dictionary<string, ApiObject>();
 
         public RamlTypeParser(RamlTypesOrderedDictionary ramlTypes, IDictionary<string, ApiObject> schemaObjects, 
             string targetNamespace, IDictionary<string, ApiEnum> enums, IDictionary<string, string> warnings)
@@ -69,10 +70,11 @@ namespace Raml.Tools
 
         private ApiObject ParseUnion(string key, RamlType ramlType)
         {
+            var name = NetNamingMapper.GetObjectName(key);
             var apiObject = new ApiObject
             {
                 IsUnionType = true,
-                Name = NetNamingMapper.GetObjectName(key),
+                Name = name,
                 Description = ramlType.Description,
                 Example = GetExample(ramlType.Example, ramlType.Examples),
                 Type = NetNamingMapper.GetObjectName(key)
@@ -91,7 +93,7 @@ namespace Raml.Tools
             var types = originalType.Split(new []{"|"}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var type in types)
             {
-              apiObject.Properties.Add(new Property
+              apiObject.Properties.Add(new Property(name)
               {
                   Name = NetNamingMapper.GetPropertyName(type.Trim()),
                   Type = isArray 
@@ -122,7 +124,14 @@ namespace Raml.Tools
                 baseType = NetNamingMapper.GetObjectName(baseType);
 
                 var itemType = ParseNestedType(ramlType.Array.Items, baseType);
-                schemaObjects.Add(baseType, itemType);
+                if (schemaObjects.ContainsKey(baseType) && !UniquenessHelper.HasSameProperties(itemType, schemaObjects, baseType, emptyDic, emptyDic))
+                {
+                    baseType = UniquenessHelper.GetUniqueName(schemaObjects, baseType, emptyDic, emptyDic);
+                    itemType.Name = baseType;
+                }
+                if (!schemaObjects.ContainsKey(baseType))
+                    schemaObjects.Add(baseType, itemType);
+
                 typeOfArray = CollectionTypeHelper.GetCollectionType(baseType);
             }
 
@@ -183,22 +192,23 @@ namespace Raml.Tools
                 {
                     Name = NetNamingMapper.GetObjectName(key),
                     Description = ramlType.Description,
-                    Values = GetEnumValues(ramlType.Scalar)
+                    Values = GetEnumValues(ramlType.Scalar, NetNamingMapper.GetObjectName(key))
                 });
                 return null;
             }
 
             var type = GetScalarType(ramlType);
 
+            var name = NetNamingMapper.GetObjectName(key);
             return new ApiObject
             {
                 Type = NetNamingMapper.GetObjectName(key),
-                Name = NetNamingMapper.GetObjectName(key),
+                Name = name,
                 Example = ramlType.Example,
                 Description = ramlType.Description,
                 Properties = new List<Property>
                 {
-                    new Property
+                    new Property(name)
                     {
                         Name = "Value",
                         Type = type,
@@ -235,14 +245,14 @@ namespace Raml.Tools
             throw new InvalidOperationException("Cannot determine type of scalar " + ramlType.Name);
         }
 
-        private static List<PropertyBase> GetEnumValues(Parameter scalar)
+        private static List<PropertyBase> GetEnumValues(Parameter scalar, string parentClassName)
         {
-            return scalar.Enum.Select(ToEnumValueName).ToList();
+            return scalar.Enum.Select(e => ToEnumValueName(e, parentClassName)).ToList();
         }
 
-        public static PropertyBase ToEnumValueName(string value)
+        public static PropertyBase ToEnumValueName(string value, string parentClassName)
         {
-            return new PropertyBase { OriginalName = value, Name = NetNamingMapper.GetEnumValueName(value) };
+            return new PropertyBase(parentClassName) { OriginalName = value, Name = NetNamingMapper.GetEnumValueName(value) };
         }
 
         private ApiObject ParseExternal(string key, RamlType ramlType)
@@ -321,11 +331,11 @@ namespace Raml.Tools
                 BaseClass = ramlType.Type != "object" ? NetNamingMapper.GetObjectName(ramlType.Type) : string.Empty,
                 Description = ramlType.Description,
                 Example = GetExample(ramlType.Example, ramlType.Examples),
-                Properties = GetProperties(ramlType.Object.Properties)
+                Properties = GetProperties(ramlType.Object.Properties, NetNamingMapper.GetObjectName(name))
             };
         }
 
-        private IList<Property> GetProperties(IDictionary<string, RamlType> properties)
+        private IList<Property> GetProperties(IDictionary<string, RamlType> properties, string className)
         {
             var props = new List<Property>();
             foreach (var kv in properties)
@@ -333,7 +343,7 @@ namespace Raml.Tools
                 var prop = kv.Value;
                 if (prop.Scalar != null)
                 {
-                    var newProp = GetPropertyFromScalar(prop, kv);
+                    var newProp = GetPropertyFromScalar(prop, kv, className);
                     props.Add(newProp);
                     continue;
                 }
@@ -343,8 +353,14 @@ namespace Raml.Tools
                     if (!schemaObjects.ContainsKey(name) && !schemaObjects.ContainsKey(prop.Type))
                     {
                         var newApiObject = GetApiObjectFromObject(prop, name);
-                        schemaObjects.Add(name, newApiObject);
-                        props.Add(new Property { Name = name, Type = name, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
+                        if (schemaObjects.ContainsKey(name) && !UniquenessHelper.HasSameProperties(newApiObject, schemaObjects, name, emptyDic, emptyDic))
+                        {
+                            name = UniquenessHelper.GetUniqueName(schemaObjects, name, emptyDic, emptyDic);
+                            newApiObject.Name = name;
+                        }
+                        if(!schemaObjects.ContainsKey(name))
+                            schemaObjects.Add(name, newApiObject);
+                        props.Add(new Property(className) { Name = name, Type = name, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
                     }
                     else
                     {
@@ -354,7 +370,7 @@ namespace Raml.Tools
                         else
                             apiObject = schemaObjects[name];
 
-                        props.Add(new Property { Name = name, Type = apiObject.Name, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
+                        props.Add(new Property(className) { Name = name, Type = apiObject.Name, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
                     }
                     
                     continue;
@@ -365,7 +381,7 @@ namespace Raml.Tools
                     var type = kv.Value.Type;
                     if (kv.Value.Array.Items != null)
                     {
-                        if (NetTypeMapper.IsPrimitiveType(kv.Value.Array.Items.Type))
+                        if (kv.Value.Array.Items.Object == null && NetTypeMapper.IsPrimitiveType(kv.Value.Array.Items.Type))
                         {
                             type = CollectionTypeHelper.GetCollectionType(NetTypeMapper.Map(kv.Value.Array.Items.Type));
                         }
@@ -385,11 +401,11 @@ namespace Raml.Tools
                         type = CollectionTypeHelper.GetCollectionType(type);
                     }
 
-                    props.Add(new Property { Name = name, Type = type, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
+                    props.Add(new Property(className) { Name = name, Type = type, Required = prop.Required, OriginalName = kv.Key.TrimEnd('?') });
                 }
                 if (!string.IsNullOrWhiteSpace(prop.Type))
                 {
-                    var newProp = new Property
+                    var newProp = new Property(className)
                     {
                         Type = NetNamingMapper.GetObjectName(kv.Key),
                         Name = NetNamingMapper.GetPropertyName(kv.Key),
@@ -405,7 +421,7 @@ namespace Raml.Tools
             return props;
         }
 
-        private Property GetPropertyFromScalar(RamlType prop, KeyValuePair<string, RamlType> kv)
+        private Property GetPropertyFromScalar(RamlType prop, KeyValuePair<string, RamlType> kv, string className)
         {
             if (prop.Scalar.Enum != null && prop.Scalar.Enum.Any())
             {
@@ -415,13 +431,13 @@ namespace Raml.Tools
                     {
                         Name = NetNamingMapper.GetPropertyName(kv.Key),
                         Description = kv.Value.Description,
-                        Values = GetEnumValues(kv.Value.Scalar)
+                        Values = GetEnumValues(kv.Value.Scalar, NetNamingMapper.GetPropertyName(kv.Key))
                     };
                     enums.Add(kv.Key, apiEnum);
                 }
             }
 
-            return new Property
+            return new Property(className)
             {
                 Minimum = ToDouble(prop.Scalar.Minimum),
                 Maximum = ToDouble(prop.Scalar.Maximum),
@@ -462,6 +478,10 @@ namespace Raml.Tools
 
                 return obj.Type;
             }
+
+            if(enums.ContainsKey(prop.Type))
+                return prop.Type;
+
 
             return "object";
         }

@@ -1,0 +1,50 @@
+#%RAML 1.0
+title: API
+description: REST services
+version: 1.2.0
+baseUri: /
+mediaType: application/json
+types:
+  fooBar:
+    type: string
+    enum:
+      - Foo
+      - Bar
+  RSupplyTariff:
+    type: object
+    properties:
+      id:
+        type: string
+        required: false
+      vatType:
+        type: string
+        enum:
+          - None
+          - Low
+          - High
+          - Unknown
+        required: false
+
+/api/product/{productid}/supplytariffs:
+  uriParameters:
+    productid:
+      type: string
+  get:
+    displayName: Get supply tariffs
+    queryParameters:
+      gasRegion:
+        type: integer
+        description: Required for gas products
+        required: false
+      gasProfile:
+        type: string
+        enum:
+          - G1
+          - G2
+        required: false
+    responses:
+      200:
+        body:
+          type: array
+          items:
+            type: RSupplyTariff

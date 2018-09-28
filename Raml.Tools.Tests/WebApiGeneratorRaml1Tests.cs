@@ -400,6 +400,42 @@ namespace Raml.Tools.Tests
             Assert.AreEqual("object", model.Objects.First(o => o.Name != "Foo").Properties.First(p => p.Name == "Baz").Type);
         }
 
+        [Test]
+        public async Task ShouldBuild_EnumsAtRoot()
+        {
+            var model = await BuildModel("files/raml1/enums-root.raml");
+            Assert.AreEqual(2, model.Enums.Count());
+        }
+
+        [Test]
+        public async Task ShouldBuild_EvenWithIncludedDisorderedTypes()
+        {
+            var model = await BuildModel("files/raml1/types-order-includes.raml");
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("InvoiceLine"), model.Objects.First(c => c.Name == "Invoice").Properties.First(p => p.Name == "Lines").Type);
+
+            Assert.AreEqual("Artist", model.Objects.First(c => c.Name == "Artist").Type);
+            Assert.AreEqual(2, model.Objects.First(c => c.Name == "Artist").Properties.Count());
+
+            Assert.AreEqual(3, model.Objects.First(c => c.Name == "Album").Properties.Count());
+            Assert.AreEqual("Artist", model.Objects.First(c => c.Name == "Album").Properties.First(m => m.Name == "Artist").Type);
+
+            Assert.AreEqual("Artist", model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Name == "GetById").ReturnType);
+            Assert.AreEqual("Album", model.Controllers.First(c => c.Name == "Albums").Methods.First(m => m.Name == "GetById").ReturnType);
+            Assert.AreEqual("Track", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Name == "GetById").ReturnType);
+            Assert.AreEqual("Customer", model.Controllers.First(c => c.Name == "Customers").Methods.First(m => m.Name == "GetById").ReturnType);
+
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("Artist"), model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Name == "Get").ReturnType);
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("Album"), model.Controllers.First(c => c.Name == "Albums").Methods.First(m => m.Name == "Get").ReturnType);
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("Customer"), model.Controllers.First(c => c.Name == "Customers").Methods.First(m => m.Name == "Get").ReturnType);
+            Assert.AreEqual(CollectionTypeHelper.GetCollectionType("Track"), model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Name == "Get").ReturnType);
+
+            Assert.AreEqual("Artist", model.Controllers.First(c => c.Name == "Artists").Methods.First(m => m.Name == "Post").Parameter.Type);
+            Assert.AreEqual("Album", model.Controllers.First(c => c.Name == "Albums").Methods.First(m => m.Name == "Post").Parameter.Type);
+            Assert.AreEqual("Customer", model.Controllers.First(c => c.Name == "Customers").Methods.First(m => m.Name == "Post").Parameter.Type);
+            Assert.AreEqual("Track", model.Controllers.First(c => c.Name == "Tracks").Methods.First(m => m.Name == "Post").Parameter.Type);
+        }
+
+
         private static async Task<WebApiGeneratorModel> GetAnnotationTargetsModel()
         {
             return await BuildModel("files/raml1/annotations-targets.raml");

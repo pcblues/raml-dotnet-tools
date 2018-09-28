@@ -12,14 +12,17 @@ namespace Raml.Tools.JSON
         private readonly ICollection<string> ids  = new Collection<string>();
         private IDictionary<string, ApiObject> otherObjects = new Dictionary<string, ApiObject>();
         private IDictionary<string, ApiObject> schemaObjects = new Dictionary<string, ApiObject>();
+        private string className;
+
         public ApiObject Parse(string key, string jsonSchema, IDictionary<string, ApiObject> objects, IDictionary<string, string> warnings, 
             IDictionary<string, ApiEnum> enums, IDictionary<string, ApiObject> otherObjects, IDictionary<string, ApiObject> schemaObjects)
         {
             this.otherObjects = otherObjects;
             this.schemaObjects = schemaObjects;
+            className = NetNamingMapper.GetObjectName(key);
             var obj = new ApiObject
                       {
-                          Name = NetNamingMapper.GetObjectName(key),
+                          Name = className,
                           Properties = new List<Property>(),
                           JSONSchema = jsonSchema.Replace(Environment.NewLine, "").Replace("\r\n", "").Replace("\n", "")
                                                  .Replace("\\", "\\\\").Replace("\"", "\\\"")
@@ -225,9 +228,9 @@ namespace Raml.Tools.JSON
             AdditionalProperties(props, schema);
         }
 
-        private static Property CreateProperty(string key, string type, KeyValuePair<string, JsonSchema> property, bool isEnum)
+        private Property CreateProperty(string key, string type, KeyValuePair<string, JsonSchema> property, bool isEnum)
         {
-            return new Property
+            return new Property(className)
             {
                 Name = NetNamingMapper.GetPropertyName(key),
                 OriginalName = key,
@@ -242,9 +245,9 @@ namespace Raml.Tools.JSON
             };
         }
 
-        private static Property CreateProperty(Newtonsoft.JsonV4.Schema.JsonSchema schema, KeyValuePair<string, Newtonsoft.JsonV4.Schema.JsonSchema> property, bool isEnum, string enumName)
+        private Property CreateProperty(Newtonsoft.JsonV4.Schema.JsonSchema schema, KeyValuePair<string, Newtonsoft.JsonV4.Schema.JsonSchema> property, bool isEnum, string enumName)
         {
-            return new Property
+            return new Property(className)
             {
                 Name = NetNamingMapper.GetPropertyName(property.Key),
                 Type = GetType(property, isEnum, enumName, schema.Required),
@@ -391,7 +394,7 @@ namespace Raml.Tools.JSON
         {
             if (propertySchema.Type.HasValue
                 && (propertySchema.Type == Newtonsoft.JsonV4.Schema.JsonSchemaType.Object || propertySchema.Type.Value.ToString().Contains("Object")) 
-                && (propertySchema.OneOf == null || propertySchema.OneOf.Count == 0 || schema.Definitions == null || schema.Definitions.Count == 0))
+                && (propertySchema.OneOf == null || propertySchema.OneOf.Count == 0 || (schema != null && (schema.Definitions == null || schema.Definitions.Count == 0))))
             {
                 if (!string.IsNullOrWhiteSpace(schema?.Id) && ids.Contains(schema.Id))
                     return;
@@ -556,7 +559,7 @@ namespace Raml.Tools.JSON
             {
                 Name = name,
                 Description = description,
-                Values = schema.Enum.Select(e => RamlTypeParser.ToEnumValueName(e.ToString())).ToList()
+                Values = schema.Enum.Select(e => RamlTypeParser.ToEnumValueName(e.ToString(), name)).ToList()
             };
 
             if (enums.ContainsKey(name))
@@ -580,7 +583,7 @@ namespace Raml.Tools.JSON
             {
                 Name = name,
                 Description = description,
-                Values = schema.Enum.Select(e => RamlTypeParser.ToEnumValueName(e.ToString())).ToList()
+                Values = schema.Enum.Select(e => RamlTypeParser.ToEnumValueName(e.ToString(), name)).ToList()
             };
 
             if (enums.ContainsKey(name))
