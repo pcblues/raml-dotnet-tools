@@ -4,17 +4,17 @@
 
 :!numbered:
 
-The AMF Tools for .NET allows developers to easily integrate and consume APIs that expose a RAML/OAS definition, or create a new ASP.NET implementation using a contract-first approach from a previously created RAML/OAS definition. See http://raml.org for information on RAML (RESTful API Markup Language). 
+The AMF Tools for .NET allows developers to easily integrate and consume APIs that expose a RAML definition, or create a new ASP.NET implementation using a contract-first approach from a previously created RAML definition. See http://raml.org for information on RAML (RESTful API Markup Language). 
 
-The tools are provided as a Visual Studio extension, allowing simple and natural integration of RAML/OAS into a normal development workflow.
+The tools are provided as a Visual Studio extension, allowing simple and natural integration of RAML into a normal development workflow.
 
 A single installation package provides support for both client and service code-generation scenarios.
 
 Contents:
 
 * <<Supported Scenarios>>
-** <<API Client Code from a RAML/OAS Definition>>
-** <<ASP.NET Implementation from a RAML/OAS Definition>>
+** <<API Client Code from a RAML Definition>>
+** <<ASP.NET Implementation from a RAML Definition>>
 ** <<Extract a RAML definition from an ASP.NET Core or WebApi 2 app>>
 * <<Prerequisites>>
 * <<Installation>>
@@ -25,7 +25,7 @@ Contents:
 ** <<Consuming the HTTP Response>>
 * <<Implementing an ASP.NET 5 (MVC 6)>>
 * <<Implementing an ASP.NET Web API>>
-* <<Updating your RAML/OAS specification>>
+* <<Updating your RAML specification>>
 * <<Implementing a Controller in ASP.NET Web API>>
 * <<Customizing the Generated Code>>
 ** <<Compatibility With New Versions of the Templates>>
@@ -46,21 +46,21 @@ Contents:
 
 == Supported Scenarios
 
-=== API Client Code from a RAML/OAS Definition
+=== API Client Code from a RAML Definition
 
-You can generate API client code from a RAML/OAS definition, which lets client applications consume existing APIs from a RAML/OAS definition.
+You can generate API client code from a RAML definition, which lets client applications consume existing APIs from a RAML definition.
 
-In Visual Studio .NET, you can add a reference to a RAML/OAS definition, and a strongly-typed client proxy is generated in the project. A local copy of the RAML/OAS definition stores as a file within the Visual Studio project, which is kept in sync with the original RAML/OAS definition.
+In Visual Studio .NET, you can add a reference to a RAML definition, and a strongly-typed client proxy is generated in the project. A local copy of the RAML definition stores as a file within the Visual Studio project, which is kept in sync with the original RAML definition.
  
-If the remote API does not provide a RAML/OAS definition, you can use a self-managed local definition to allow rapid generation of the client code in a declarative manner.
+If the remote API does not provide a RAML definition, you can use a self-managed local definition to allow rapid generation of the client code in a declarative manner.
 
-=== ASP.NET Implementation from a RAML/OAS Definition
+=== ASP.NET Implementation from a RAML Definition
 
-You can generate an ASP .NET MVC 6 or Web API 2 implementation from a new or existing RAML/OAS definition.
+You can generate an ASP .NET MVC 6 or Web API 2 implementation from a new or existing RAML definition.
 
-From within Visual Studio .NET, you can add a RAML/OAS definition from which the tool generates an initial ASP .NET MVC 6, or Web API 2 implementation, depending if you are invoking the command from a Visual Studio 2017 project type (.xproj) or the traditional project type (.csproj). This implementation includes controller classes and route registrations that map to the resources exposed in the RAML/OAS definition and also includes model classes for their representation. The model classes are generated from the available RAML/OAS types or JSON schemas.
+From within Visual Studio .NET, you can add a RAML definition from which the tool generates an initial ASP .NET MVC 6, or Web API 2 implementation, depending if you are invoking the command from a Visual Studio 2017 project type (.xproj) or the traditional project type (.csproj). This implementation includes controller classes and route registrations that map to the resources exposed in the RAML definition and also includes model classes for their representation. The model classes are generated from the available RAML types or JSON schemas.
 
-In code, the controllers definition and implementation are logically separated. The generated code representing the definition is driven by the RAML/OAS definition allowing you to focus exclusively on the implementation classes. This separation of concerns allows iterative evolution of the API with non-destructive forward engineering of the code-based definition.
+In code, the controllers definition and implementation are logically separated. The generated code representing the definition is driven by the RAML definition allowing you to focus exclusively on the implementation classes. This separation of concerns allows iterative evolution of the API with non-destructive forward engineering of the code-based definition.
 
 === Extract a RAML definition from an ASP.NET Core or WebApi 2 app
 
@@ -73,7 +73,7 @@ When enabling metadata, a local endpoint is registered to provide a browser-acce
 
 * Visual Studio 2017
 * .NET Framework 4.6.2 or higher
-* RAML 1.0/0.8 or OAS 2.0 compatible endpoint
+* RAML 1.0/0.8 compatible endpoint
 * Supported languages: C# (other languages indirectly)
 
 == Installation
@@ -88,7 +88,7 @@ image::./docimages/RAML_NET_VSIXInstaller.png[align="center"]
 == Generating an API Client
 
 . Start Visual Studio 2017 and create a new project that consumes the API, or open an existing project.
-. In the Solution Explorer right-click the References node for the selected project and select the *Add RAML/OAS Reference* command.
+. In the Solution Explorer right-click the References node for the selected project and select the *Add RAML Reference* command.
 +
 image::./docimages/RAML_NET_SolutionExplorer.png[align="center"]
 +
@@ -210,9 +210,9 @@ image::./docimages/webapi-vs2015.png[align="center", width="550"]
 +
 . In the Solution Explorer, right-click the project node and click the *Add RAML Contract* command.
 +
-image::./docimages/RAML_NETAddRAMLContract.png[align="center", width="550"]
+image::./docimages/add-raml-contract-vs2015.png[align="center", width="550"]
 +
-. The dialog lets you create a RAML definition or import an existing one. If you import an existing one, click  the *Go* button to download the RAML definition from an URL, or browse to use a local copy from your file system. 
+. The dialog lets you create a RAML definition or import an existing one. If you import an existinadd-raml-contract-vs2015g one, click  the *Go* button to download the RAML definition from an URL, or browse to use a local copy from your file system. 
 
 The preview screen has several options to customize the generated code. You can change the filename, namespace, or choose asynchronous methods.
 
@@ -227,7 +227,7 @@ If you leave these fields empty, it will place the generated controllers in the 
 If you plan to host several versions of the API in the same solution, you can check the "Use api version" option. 
 This will add the version as a prefix to routes, controllers, and models, thus preventing collision between different versions of the API.
 
-image::docimages/RAML_NETAddRAMLContractScreen.png[align="center", width=550]
+image::docimages/add-raml-contract-vs2015Screen.png[align="center", width=550]
 
 
 
@@ -242,7 +242,7 @@ image::./docimages/RAML_NET_NewASPProject.png[align="center", width="550"]
 +
 . In the Solution Explorer, right-click the project node and click the *Add RAML Contract* command.
 +
-image::./docimages/RAML_NETAddRAMLContract.png[align="center", width="550"]
+image::./docimages/add-raml-contract-vs2015.png[align="center", width="550"]
 +
 . The dialog lets you create a RAML definition or import an existing one. If you import an existing one, click  the *Go* button to download the RAML definition from an URL, or browse to use a local copy from your file system. 
 
@@ -259,11 +259,11 @@ If you leave these fields empty, it will place the generated controllers in the 
 If you plan to host several versions of the API in the same solution, you can check the "Use api version" option. 
 This will add the version as a prefix to routes, controllers, and models, thus preventing collision between different versions of the API.
 
-image::docimages/RAML_NETAddRAMLContractScreen.png[align="center", width=550]
+image::docimages/add-raml-contract-vs2015Screen.png[align="center", width=550]
 
 
 
-== Updating your RAML/OAS specification
+== Updating your RAML specification
 
 The tool also supports updating the generated ASP.NET MVC 6 or Web API when a change is made to the RAML definition. This lets you keep the contract definition in a RAML file with the implementation, so that both stay in sync. The classes get re-generated when you save changes made to any the RAML files in your project. This only affects the existing .NET contract interfaces and adds ASP.NET MVC 6 or Web API controller implementations for any new resource in the RAML definition. The existing controller implementations remain untouched.
 
