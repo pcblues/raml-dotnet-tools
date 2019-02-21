@@ -72,9 +72,10 @@ namespace MuleSoft.RAMLGen
         private static void InformError(Exception ex)
         {
             Console.WriteLine("Error: " + ex.Message);
+            System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
             //Console.WriteLine(ex.Source);
             //Console.WriteLine(ex.StackTrace);
-            if(ex.InnerException != null)
+            if (ex.InnerException != null)
                 InformError(ex.InnerException);
         }
 

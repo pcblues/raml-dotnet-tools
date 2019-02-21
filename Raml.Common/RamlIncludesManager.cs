@@ -142,7 +142,29 @@ namespace Raml.Common
             if (!line.Contains(IncludeDirective) && !isUseLine)
                 return;
 
-            var includeSource = isUseLine ? GetUsePath(line) : GetIncludePath(line);
+            var includeSource2 = isUseLine ? GetUsePath(line) : GetIncludePath(line);
+            
+
+            // mdo 21.2.2019 - includeSource needs to be a full path (path + converted includeSource)
+            if (!path.EndsWith("\\")) path += "\\";
+
+            var altPath = rootRamlPath;
+            if (!altPath.EndsWith("\\")) altPath += "\\";
+
+            var includeSource ="";
+
+            // mdo 21.2.2019 -  need to handle files where path is not given
+            //                  hope they have already been generated
+            if (includeSource2.Contains("/"))
+            {
+                includeSource = new Uri(path + includeSource2).LocalPath;
+            }
+            else
+            {
+                includeSource = new Uri(altPath + includeSource2).LocalPath;
+            }
+
+            
 
             var destinationFilePath = GetDestinationFilePath(destinationFolder, includeSource);
 
@@ -161,6 +183,7 @@ namespace Raml.Common
                 else
                 {
                     ManageLocalFile(path, relativePath, confirmOvewrite, includeSource, destinationFilePath);
+                        
                 }
 
                 includedFiles.Add(destinationFilePath);
